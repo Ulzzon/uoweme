@@ -194,7 +194,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String stringMembers = createStringOfId(saveGroup.getMembersId());
         ArrayList<Person> members = saveGroup.getMembers();
         for(Person p : members){
-            stringMembers += p.getPersonalId() + ", ";
+            stringMembers += p.getDbId() + ", ";
         }
 
         String stringExpenses = "";
@@ -219,7 +219,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Person> members = saveGroup.getMembers();
         if(!members.isEmpty()) {
             for (Person p : members) {
-                stringMembers += p.getPersonalId() + ", ";
+                stringMembers += p.getDbId() + ", ";
             }
             Log.d(LOG, "Save members: " +stringMembers);
         }
@@ -264,7 +264,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         c.moveToFirst();
 
         Person person = new Person();
-        person.setPersonalId(c.getLong(c.getColumnIndex(KEY_ID)));
+        person.setDbId(c.getLong(c.getColumnIndex(KEY_ID)));
         person.setName((c.getString(c.getColumnIndex(KEY_MEMBER_NAME))));
         person.setNumber(c.getString(c.getColumnIndex(KEY_MEMBER_PHONE)));
         c.close();
@@ -274,16 +274,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void updatePerson(Person savePerson){
         SQLiteDatabase db = getWritableDatabase();
-        String select = "LIKE? " + KEY_ID;
-        String[] selectionArgs = { String.valueOf(savePerson.getPersonalId()) };
+        String select = KEY_ID + " LIKE ? ";
+        String[] selectionArgs = { String.valueOf(savePerson.getDbId()) };
 
         ContentValues values = new ContentValues();
         values.put(KEY_MEMBER_NAME, savePerson.getName());
         values.put(KEY_MEMBER_PHONE, savePerson.getNumber());
 
+        Log.d(LOG, "Update Person with: " +values.toString());
         db.update(TABLE_MEMBER, values, select, selectionArgs);
 
-        Log.d(LOG, "Update Person with: " +values.toString());
+
     }
 
     public long savePersonToDb(Person savePerson){
@@ -293,7 +294,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_MEMBER_PHONE, savePerson.getNumber());
 
         long person_id = db.insert(TABLE_MEMBER, null, values);
-        savePerson.setPersonalId(person_id);
+        savePerson.setDbId(person_id);
+        Log.d(LOG, "Save Person with id: " +person_id + " & " +values.toString());
+        return person_id;
+    }
+
+    public long savePersonToDb(Person savePerson, SQLiteDatabase db){
+        //SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_MEMBER_NAME, savePerson.getName());
+        values.put(KEY_MEMBER_PHONE, savePerson.getNumber());
+
+        long person_id = db.insert(TABLE_MEMBER, null, values);
+        savePerson.setDbId(person_id);
         Log.d(LOG, "Save Person with id: " +person_id + " & " +values.toString());
         return person_id;
     }
@@ -409,10 +422,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    /* ##### General ##### */
+
 
     public long[] splitStringToId(String string){
-
+        if(string.equals("") || string.isEmpty() ||string.equals(null)){
+            return new long[1];
+        }
         String[] ids = string.split(", ");
+        if(ids.length == 0){
+            return new long[1];
+        }
         long[] id = new long[ids.length];
         int count = 0;
         for( String i : ids){
@@ -430,5 +450,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             idString += m + ", ";
         }
         return idString;
+    }
+
+    public int getContactTableSize(){
+        SQLiteDatabase db = getWritableDatabase();
+        String count = "SELECT count(*) FROM " + TABLE_EXPENSE;
+        Cursor mcursor = db.rawQuery(count, null);
+        mcursor.moveToFirst();
+        return mcursor.getInt(0);
     }
 }

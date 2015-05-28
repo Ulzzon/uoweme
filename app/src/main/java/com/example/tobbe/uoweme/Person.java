@@ -7,7 +7,7 @@ public class Person {
 
     private String number = "null";
     private String name = "none";
-    private long personalId = 0;
+    private long dbId = 0;
 
     public Person(){}
     public Person(String name, String number){
@@ -27,7 +27,7 @@ public class Person {
 
     public String getNumber() { return this.number; }
 
-    public void setPersonalId(long id){ this.personalId = id; }
+    public void setDbId(long id){ this.dbId = id; }
 
-    public long getPersonalId(){ return this.personalId; }
+    public long getDbId(){ return this.dbId; }
 }

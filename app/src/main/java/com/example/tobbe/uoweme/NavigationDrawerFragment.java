@@ -1,7 +1,6 @@
 package com.example.tobbe.uoweme;
 
-import android.app.Application;
-import android.app.FragmentManager;
+
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -13,7 +12,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,11 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 
 import helper.DatabaseHelper;
 
@@ -66,9 +62,7 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
 
 
-    private ExpenseGroup[] mGroupArray;
     public static GroupAdapter mGroupAdapter;
-    private FeedReaderDbHelper mDbHelper;
     private DatabaseHelper db;
     public NavigationDrawerFragment() {
     }
@@ -100,7 +94,6 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //mDbHelper = new FeedReaderDbHelper(getActivity().getBaseContext());
         db = new DatabaseHelper(getActivity().getBaseContext());
         mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
@@ -118,19 +111,6 @@ public class NavigationDrawerFragment extends Fragment {
                 return false;
             }
         });
-        //mGroupAdapter = new GroupAdapter(getActivity().getBaseContext());
-        //mGroupAdapter.setDbHelper(mDbHelper);
-        //mGroupAdapter = new GroupAdapter(getActionBar().getThemedContext(),
-        //        new String[]{"Group 1", "Group 2"},
-        //        new String[]{"My first group", "My second group"});
-        //int size = mDbHelper.getDbCount();
-        //for(int i =0; i <= size ; i++){
-        //    mGroupAdapter.addGroup(mDbHelper.readGroupFromDb(i));
-        //    if(i >= 25){
-        //        break;
-        //    }
-        //}
-        //mGroupAdapter = new GroupAdapter(getActivity().getBaseContext(), mDbHelper.readGroupFromDb());
         mGroupAdapter = new GroupAdapter(getActivity().getBaseContext(), db.getAllGroupsFromDb());
         mDrawerListView.setAdapter(mGroupAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
@@ -279,8 +259,6 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_example) {
-            //ExpenseGroup addNewGroup = mDbHelper.readGroupFromDb(mCurrentSelectedPosition);
-            //mGroupAdapter.addGroup(addNewGroup);
             Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
             return true;
         }else if(item.getItemId() == R.id.addGroup){

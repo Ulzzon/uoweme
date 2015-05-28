@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +38,6 @@ public class MainActivity extends ActionBarActivity
      */
     private static CharSequence mTitle;
     public static int activeGroupId = 0;
-    public static FeedReaderDbHelper mDbHelper;
     public static DatabaseHelper db;
 
     public static android.support.v4.app.FragmentManager fragmentManager;
@@ -48,7 +46,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mDbHelper = new FeedReaderDbHelper(getBaseContext());
         db = new DatabaseHelper(getBaseContext());
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -90,6 +87,10 @@ public class MainActivity extends ActionBarActivity
             activeGroupId = number;
         } catch (Exception e) {
             mTitle = "NoTitle";
+            Log.d("SectionAttached", "No group found ");
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, ProfileFragment.newInstance())
+                    .commit();
         }
     }
 
@@ -198,7 +199,7 @@ public class MainActivity extends ActionBarActivity
                 listOfMembers.add(p.getName());
             }
             ListView membersList = (ListView) rootView.findViewById(R.id.memberList);
-            ArrayAdapter<String> membersAdapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+            ArrayAdapter<String> membersAdapter = new ArrayAdapter<>(getActivity().getBaseContext(),
                     R.layout.item_member_list,
                     R.id.memberName,
                     listOfMembers);
@@ -229,6 +230,7 @@ public class MainActivity extends ActionBarActivity
                     addExpense.setAmount(500);
                     addExpense.setTitle("Expensive");
                     addExpense.setAffectedMembersIds(group.getMembersId());
+                    addExpense.setOwnerId(1);
                     group.addExpense(addExpense);
                 }
             });
@@ -299,7 +301,7 @@ public class MainActivity extends ActionBarActivity
 
 
             ListView membersList = (ListView) rootView.findViewById(R.id.listMembers);
-            ArrayAdapter<String> membersAdapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+            ArrayAdapter<String> membersAdapter = new ArrayAdapter<>(getActivity().getBaseContext(),
                     R.layout.item_member_list,
                     R.id.memberName,
                     allNames);
@@ -350,7 +352,9 @@ public class MainActivity extends ActionBarActivity
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_SECTION_TITLE = "section_title";
-        //private int groupNumber;
+        private Person owner;
+        private EditText textName;
+        private EditText textPhoneNr;
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -362,19 +366,34 @@ public class MainActivity extends ActionBarActivity
             //args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             args.putString(ARG_SECTION_TITLE, "Profile");
             fragment.setArguments(args);
+
             return fragment;
         }
 
         public ProfileFragment() {
+            owner = new Person();
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
-            Context mContext = getActivity().getBaseContext();
 
+            if(db.getContactTableSize() == 0){
+                db.savePersonToDb(owner);
+            }
+            textName = (EditText) rootView.findViewById(R.id.profileName);
+            textPhoneNr = (EditText) rootView.findViewById(R.id.phoneText);
             return rootView;
+        }
+
+        @Override
+        public void onDetach() {
+            owner.setName(textName.getText().toString() + " (Me)");
+            owner.setNumber(textPhoneNr.getText().toString());
+            //owner.setDbId(1);
+            db.updatePerson(owner);
+            super.onDetach();
         }
 
         @Override

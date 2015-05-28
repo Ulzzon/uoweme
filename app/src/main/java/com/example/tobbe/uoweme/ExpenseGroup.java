@@ -112,7 +112,7 @@ public class ExpenseGroup {
     public void deleteAllMembers(){
         if(!members.isEmpty()) {
             for (Person p : members) {
-                MainActivity.db.deletePerson(p.getPersonalId());
+                MainActivity.db.deletePerson(p.getDbId());
             }
             members.clear();
             dbMembersString = "";
