@@ -379,11 +379,18 @@ public class MainActivity extends ActionBarActivity
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
 
-            if(db.getContactTableSize() == 0){
-                db.savePersonToDb(owner);
-            }
+
             textName = (EditText) rootView.findViewById(R.id.profileName);
             textPhoneNr = (EditText) rootView.findViewById(R.id.phoneText);
+
+            if(db.getContactTableSize() == 0){
+                db.savePersonToDb(owner);
+            }else{
+                Person profileOwner = db.getPerson(1);
+                textName.setText(profileOwner.getName());
+                textPhoneNr.setText(profileOwner.getNumber());
+            }
+
             return rootView;
         }
 

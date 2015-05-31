@@ -299,17 +299,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return person_id;
     }
 
-    public long savePersonToDb(Person savePerson, SQLiteDatabase db){
-        //SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_MEMBER_NAME, savePerson.getName());
-        values.put(KEY_MEMBER_PHONE, savePerson.getNumber());
-
-        long person_id = db.insert(TABLE_MEMBER, null, values);
-        savePerson.setDbId(person_id);
-        Log.d(LOG, "Save Person with id: " +person_id + " & " +values.toString());
-        return person_id;
-    }
 
     public void deletePerson(long personId){
         SQLiteDatabase db = getWritableDatabase();
@@ -344,8 +333,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         String selectQuery = "SELECT * FROM " + TABLE_EXPENSE + " WHERE "
                 + KEY_ID+ " = " + expense_id ;
-
-        Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -457,6 +444,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String count = "SELECT count(*) FROM " + TABLE_EXPENSE;
         Cursor mcursor = db.rawQuery(count, null);
         mcursor.moveToFirst();
-        return mcursor.getInt(0);
+        int size = mcursor.getInt(0);
+        mcursor.close();
+        return size;
     }
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="60dp"
+    android:minWidth="60dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:background="#cccc"
+    android:id="@+id/newExpensePopup"
+    tools:context=".NewExpenseActivity">
+
+
+    <EditText
+        android:id="@+id/expenseTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Title"
+        android:textColor="#6d000000"
+        android:lines="1"
+        android:minWidth="25dp"
+        android:ems="10"
+        android:layout_marginTop="48dp"
+        />
+
+    <EditText
+        android:id="@+id/expenseAmountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Amount"
+        android:textColor="#6d000000"
+        android:lines="1"
+        android:minWidth="25dp"
+        android:inputType="phone"
+        android:ems="10"
+        android:layout_below="@+id/expenseTitleText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
+
+    <Button
+        android:id="@+id/createExpenseButton"
+        style="?android:attr/buttonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:layout_below="@+id/expenseAmountText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+
+    <Button
+        android:id="@+id/cancelButton"
+        style="?android:attr/buttonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:layout_marginLeft="30dp"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/expenseAmountText"
+        android:layout_toRightOf="@+id/createExpenseButton" />
+
+
+</RelativeLayout>

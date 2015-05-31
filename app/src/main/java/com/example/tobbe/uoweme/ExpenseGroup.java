@@ -126,6 +126,7 @@ public class ExpenseGroup {
         expenses.add(expense);
         MainActivity.db.saveExpenseToDb(expense);
         MainActivity.db.updateGroup(this);
+
     }
 
     public void deleteAllExpenses(){
