@@ -16,15 +16,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewMemberActivity"
-            android:theme="@android:style/Theme.Dialog"
-            android:label="@string/app_name" >
+        <activity
+            android:name=".NewMemberActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Dialog" >
             <intent-filter>
                 <action android:name="com.example.tobbe.uoweme.NewMemberActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-       </activity>
+        </activity>
+        <activity
+            android:name=".NewExpenseActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Dialog" >
+            <intent-filter>
+                <action android:name="com.example.tobbe.uoweme.NewExpenseActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.example.tobbe.uoweme;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -224,14 +225,18 @@ public class MainActivity extends ActionBarActivity
             addExpenseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    ExpenseGroup group = GroupAdapter.getExpenseGroup(MainActivity.activeGroupId);
+                    Intent expenseActivityIntent = new Intent(getActivity().getBaseContext().getString(R.string.new_expense_intent));
+                    expenseActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    expenseActivityIntent.putExtra("groupId", activeGroupId);
+                    startActivity(expenseActivityIntent);
+                   /* ExpenseGroup group = GroupAdapter.getExpenseGroup(MainActivity.activeGroupId);
                     Expense addExpense = new Expense();
                     addExpense.setAmount(500);
                     addExpense.setTitle("Expensive");
                     addExpense.setAffectedMembersIds(group.getMembersId());
                     addExpense.setOwnerId(1);
                     group.addExpense(addExpense);
+                    */
                 }
             });
 

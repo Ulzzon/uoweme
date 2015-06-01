@@ -8,6 +8,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="new_member_intent">com.example.tobbe.uoweme.NewMemberActivity</string>
+    <string name="new_expense_intent">com.example.tobbe.uoweme.NewExpenseActivity</string>
     <string name="save_group_changes">SAVE CHANGES</string>
     <string name="create_group">Create Group</string>
 
@@ -27,4 +28,7 @@
     <string name="exchange_sek">SEK</string>
     <string name="exchange_usd">USD</string>
     <string name="exchange_eu">EUR</string>
+    <string name="title_activity_new_expense">NewExpenseActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
