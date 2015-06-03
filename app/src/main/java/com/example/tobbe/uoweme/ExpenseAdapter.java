@@ -66,4 +66,12 @@ public class ExpenseAdapter extends BaseAdapter {
         expenses.add(addExpense);
         notifyDataSetChanged();
     }
+
+    public int getTotalExpenses(){
+        int total = 0;
+        for(Expense e : expenses){
+            total += e.getAmount();
+        }
+        return total;
+    }
 }

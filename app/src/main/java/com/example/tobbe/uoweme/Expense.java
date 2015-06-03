@@ -4,11 +4,11 @@ package com.example.tobbe.uoweme;
  * Created by Tobbe on 2015-03-14.
  */
 public class Expense {
-    private String title;
+    private String title = "Expense";
     private int amount = 1;
-    private long dbId;
-    private long ownerId;
-    private long[] affectedMembersIds;
+    private long dbId = 1;
+    private long ownerId = 1;
+    private long[] affectedMembersIds = {};
     //private enum exchange;
 
     public void setAmount(int amount) {

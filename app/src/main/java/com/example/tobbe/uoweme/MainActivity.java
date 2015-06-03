@@ -205,18 +205,7 @@ public class MainActivity extends ActionBarActivity
                     R.id.memberName,
                     listOfMembers);
             membersList.setAdapter(membersAdapter);
-            //ListView expenseList = (ListView)
             ListView expenseList = (ListView) rootView.findViewById((R.id.expenseList));
-/*
-            ArrayList<String> listOfExpenses = new ArrayList<>();
-            for(Expense e : activeExpenseGroup.getExpenses()){
-                listOfExpenses.add("Amount: " + e.getAmount());
-            }
-            ArrayAdapter<String> expenseAdapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
-                    R.layout.item_expense_list,
-                    R.id.expenseAmount,
-                    listOfExpenses);
-*/
 
             ExpenseAdapter expenseAdapter = new ExpenseAdapter(getActivity().getBaseContext(),activeExpenseGroup.getExpenses());
             expenseList.setAdapter(expenseAdapter);
@@ -227,7 +216,7 @@ public class MainActivity extends ActionBarActivity
                 public void onClick(View v) {
                     Intent expenseActivityIntent = new Intent(getActivity().getBaseContext().getString(R.string.new_expense_intent));
                     expenseActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    expenseActivityIntent.putExtra("groupId", activeGroupId);
+                    expenseActivityIntent.putExtra(getString(R.string.group_number), activeGroupId);
                     startActivity(expenseActivityIntent);
                    /* ExpenseGroup group = GroupAdapter.getExpenseGroup(MainActivity.activeGroupId);
                     Expense addExpense = new Expense();
@@ -239,6 +228,10 @@ public class MainActivity extends ActionBarActivity
                     */
                 }
             });
+
+            TextView totalGroupExpenses = (TextView) rootView.findViewById(R.id.totalExpenseTextView);
+            totalGroupExpenses.setText("Groups Total: " + expenseAdapter.getTotalExpenses() + "kr");
+
 
             return rootView;
         }

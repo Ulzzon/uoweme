@@ -20,11 +20,13 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
     private EditText amountText;
     private Button createButton;
     private Button cancelButton;
+    private int groupId =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_expense);
+        groupId = getIntent().getIntExtra(getString(R.string.group_number), 1);
 
         titleText = (EditText) findViewById(R.id.expenseTitleText);
         titleText.setOnClickListener(this);
@@ -45,11 +47,14 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()){
             case(R.id.expenseTitle):
+                titleText.setText("");
                 break;
             case(R.id.expenseAmount):
+                amountText.setText("");
                 break;
             case(R.id.createExpenseButton):
                 createNewExpense();
+                this.finish();
                 break;
             case(R.id.cancelButton):
                 this.finish();
@@ -66,7 +71,7 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
         }
         addingExpense.setTitle(titleText.getText().toString());
         addingExpense.setOwnerId(1);
-        ExpenseGroup group = MainActivity.GroupSettingsFragment.getActiveGroup();
+        ExpenseGroup group = GroupAdapter.getExpenseGroup(groupId);
         group.addExpense(addingExpense);
     }
 }

@@ -17,6 +17,7 @@
     <string name="group_title">New Group</string>
     <string name="default_title">Title</string>
     <string name="default_description">Description</string>
+    <string name="group_number">group_nr</string>
 
     <!-- Menu strings -->
     <string name="action_settings">Settings</string>
