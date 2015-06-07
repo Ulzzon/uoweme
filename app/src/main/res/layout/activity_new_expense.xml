@@ -66,5 +66,16 @@
         android:layout_below="@+id/expenseAmountText"
         android:layout_toRightOf="@+id/createExpenseButton" />
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/listGroupMembers"
+        android:layout_below="@id/createExpenseButton"
+        android:choiceMode="multipleChoice"
+        />
+
 
 </RelativeLayout>

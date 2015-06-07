@@ -23,8 +23,6 @@ public class GroupAdapter extends BaseAdapter{
 
     private static ArrayList<ExpenseGroup> myGroups;
 
-    public static ArrayList getMyGroups(){return myGroups;}
-
     public static ExpenseGroup getExpenseGroup(int position){
         if(myGroups != null && myGroups.size() > position) {
             return myGroups.get(position);
@@ -121,13 +119,13 @@ public class GroupAdapter extends BaseAdapter{
     }
 
     public void removeGroup(int position){
-        ExpenseGroup groupToDelet = myGroups.get(position);
-        Log.d(LOG, "Delete Group: " +groupToDelet.getTitle()+ " DbId: " + groupToDelet.getDbID());
+        ExpenseGroup groupToDelete = myGroups.get(position);
+        Log.d(LOG, "Delete Group: " + groupToDelete.getTitle() + " DbId: " + groupToDelete.getDbID());
         // Remove expenses that is connected to this group
-        groupToDelet.deleteAllExpenses();
-        groupToDelet.deleteAllMembers();
+        groupToDelete.deleteAllExpenses();
+        groupToDelete.deleteAllMembers();
         myGroups.remove(position);
-        MainActivity.db.deleteGroup(groupToDelet.getDbID());
+        MainActivity.db.deleteGroup(groupToDelete.getDbID());
         notifyDataSetChanged();
     }
 

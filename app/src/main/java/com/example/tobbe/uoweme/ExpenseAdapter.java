@@ -19,11 +19,9 @@ public class ExpenseAdapter extends BaseAdapter {
     private static String LOG = "ExpenseAdapter";
 
     private static ArrayList<Expense> expenses;
-    private Context context;
     private static LayoutInflater inflater = null;
 
     public ExpenseAdapter(Context context, ArrayList<Expense> groupArrayList) {
-        this.context = context;
         expenses = groupArrayList;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -58,7 +56,8 @@ public class ExpenseAdapter extends BaseAdapter {
         Expense newExpense = expenses.get(position);
         title.setText(newExpense.getTitle());
         amount.setText("Cash: " +newExpense.getAmount());
-        owner.setText("Id: " +newExpense.getOwnerId());
+        //owner.setText("Owner: " +MainActivity.db.getPerson(newExpense.getOwnerId()).getName());
+        owner.setText("OwnerId: " +newExpense.getOwnerId());
         return vi;
     }
 

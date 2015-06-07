@@ -218,20 +218,11 @@ public class MainActivity extends ActionBarActivity
                     expenseActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     expenseActivityIntent.putExtra(getString(R.string.group_number), activeGroupId);
                     startActivity(expenseActivityIntent);
-                   /* ExpenseGroup group = GroupAdapter.getExpenseGroup(MainActivity.activeGroupId);
-                    Expense addExpense = new Expense();
-                    addExpense.setAmount(500);
-                    addExpense.setTitle("Expensive");
-                    addExpense.setAffectedMembersIds(group.getMembersId());
-                    addExpense.setOwnerId(1);
-                    group.addExpense(addExpense);
-                    */
                 }
             });
 
             TextView totalGroupExpenses = (TextView) rootView.findViewById(R.id.totalExpenseTextView);
             totalGroupExpenses.setText("Groups Total: " + expenseAdapter.getTotalExpenses() + "kr");
-
 
             return rootView;
         }
