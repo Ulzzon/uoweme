@@ -1,6 +1,7 @@
 package com.example.tobbe.uoweme;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,10 @@ public class MembersAdapter extends BaseAdapter {
     private ArrayList<Person> myPersons;
     private LayoutInflater inflater = null;
 
-    MembersAdapter(Context context){
+    MembersAdapter(Context context, ArrayList<Person> persons){
 
         this.context = context;
-        myPersons = new ArrayList<>();
+        myPersons = persons;
 
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -56,6 +57,9 @@ public class MembersAdapter extends BaseAdapter {
         nameView.setText(member.getName());
         TextView phoneNrView = (TextView) vi.findViewById(R.id.memberPhoneNr);
         phoneNrView.setText(member.getNumber());
+        TextView expenseView = (TextView) vi.findViewById(R.id.membersExpense);
+        expenseView.setTextColor(Color.RED);
+        expenseView.setText("Expense: -340");
 
         return vi;
     }

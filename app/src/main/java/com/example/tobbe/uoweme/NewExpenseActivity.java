@@ -27,6 +27,7 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
     private Button cancelButton;
     private ListView listAllMembers;
     private int groupId =1;
+    private long memberId;
     private ExpenseGroup group;
 
     @Override
@@ -34,6 +35,7 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_expense);
         groupId = getIntent().getIntExtra(getString(R.string.group_number), 1);
+        memberId = getIntent().getLongExtra(getString(R.string.member_db_id), 1);
         group = GroupAdapter.getExpenseGroup(groupId);
 
         titleText = (EditText) findViewById(R.id.expenseTitleText);
@@ -62,7 +64,6 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
 
 
     }
-
 
 
 

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -200,11 +201,27 @@ public class MainActivity extends ActionBarActivity
                 listOfMembers.add(p.getName());
             }
             ListView membersList = (ListView) rootView.findViewById(R.id.memberList);
+/*
             ArrayAdapter<String> membersAdapter = new ArrayAdapter<>(getActivity().getBaseContext(),
                     R.layout.item_member_list,
                     R.id.memberName,
                     listOfMembers);
+
+*/
+            MembersAdapter membersAdapter = new MembersAdapter(getActivity().getBaseContext(), activeExpenseGroup.getMembers());
+            membersList.setOnItemClickListener(new ListView.OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent expenseActivityIntent = new Intent(getActivity().getBaseContext().getString(R.string.new_expense_intent));
+                    expenseActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    expenseActivityIntent.putExtra(getString(R.string.group_number), activeGroupId);
+                    expenseActivityIntent.putExtra(getString(R.string.member_db_id), id);
+                    startActivity(expenseActivityIntent);
+                }
+
+            });
             membersList.setAdapter(membersAdapter);
+
             ListView expenseList = (ListView) rootView.findViewById((R.id.expenseList));
 
             ExpenseAdapter expenseAdapter = new ExpenseAdapter(getActivity().getBaseContext(),activeExpenseGroup.getExpenses());

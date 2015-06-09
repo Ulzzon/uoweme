@@ -14,6 +14,13 @@
     android:id="@+id/newExpensePopup"
     tools:context=".NewExpenseActivity">
 
+    <TextView
+        android:id="@+id/expenseHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/material_blue_grey_900"
+        android:text="Header"
+        />
 
     <EditText
         android:id="@+id/expenseTitleText"

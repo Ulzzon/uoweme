@@ -11,6 +11,7 @@
     <string name="new_expense_intent">com.example.tobbe.uoweme.NewExpenseActivity</string>
     <string name="save_group_changes">SAVE CHANGES</string>
     <string name="create_group">Create Group</string>
+    <string name="member_db_id">member_db_id</string>
 
 
     <!-- Group related -->
