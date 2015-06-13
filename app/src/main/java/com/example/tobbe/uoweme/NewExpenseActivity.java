@@ -61,8 +61,6 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
                 R.id.memberName,
                 allNames);
         listAllMembers.setAdapter(membersAdapter);
-
-
     }
 
 
@@ -99,7 +97,7 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
             Log.d(LOG, "Failed to parse Integer");
         }
         addingExpense.setTitle(titleText.getText().toString());
-        addingExpense.setOwnerId(1);
+        addingExpense.setOwnerId(memberId);
 
         boolean noneSelected = true;
         SparseBooleanArray checked = listAllMembers.getCheckedItemPositions();

@@ -9,16 +9,15 @@ public enum CalculateExpenses {
     INSTANCE;
 
 
-    public int calculateDebt(Person individual, ExpenseGroup group){
+    public int calculateDebt(Person individual, ArrayList<Expense> expenses){
         long individualDbId = individual.getDbId();
         int debtAmount = 0;
-        ArrayList<Expense> allExpenses = group.getExpenses();
         long[] tmpEffectedIds;
-        for(Expense e : allExpenses){
+        for(Expense e : expenses){
             tmpEffectedIds = e.getAffectedMembersIds();
             for(long id : tmpEffectedIds){
                 if(individualDbId == id){
-                    debtAmount += e.getAmount();
+                    debtAmount += Math.ceil(e.getAmount() / tmpEffectedIds.length);
                 }
             }
 
@@ -26,15 +25,20 @@ public enum CalculateExpenses {
         return debtAmount;
     }
 
-    public int calculateIndividualExpense(Person individual, ExpenseGroup group){
+    public int calculateIndividualExpense(Person individual, ArrayList<Expense> expenses){
         long individualDbId = individual.getDbId();
         int totalExpenseAmount = 0;
-        ArrayList<Expense> allExpenses = group.getExpenses();
-        for(Expense e : allExpenses){
+        for(Expense e : expenses){
             if(e.getOwnerId() == individualDbId){
                 totalExpenseAmount += e.getAmount();
             }
         }
         return totalExpenseAmount;
+    }
+
+    public int calculateIndividualTotal(Person individual, ArrayList<Expense> expenses){
+        int total = 0;
+        total = calculateIndividualExpense(individual,expenses) - calculateDebt(individual,expenses);
+        return total;
     }
 }

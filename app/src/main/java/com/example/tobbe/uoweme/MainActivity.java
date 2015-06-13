@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,10 +20,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.tobbe.uoweme.adapters.ExpenseExpandAdapter;
+
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import helper.DatabaseHelper;
 
@@ -208,7 +214,9 @@ public class MainActivity extends ActionBarActivity
                     listOfMembers);
 
 */
-            MembersAdapter membersAdapter = new MembersAdapter(getActivity().getBaseContext(), activeExpenseGroup.getMembers());
+            MembersAdapter membersAdapter = new MembersAdapter(getActivity().getBaseContext(),
+                    activeExpenseGroup.getMembers(),
+                    activeExpenseGroup.getExpenses());
             membersList.setOnItemClickListener(new ListView.OnItemClickListener(){
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -222,10 +230,35 @@ public class MainActivity extends ActionBarActivity
             });
             membersList.setAdapter(membersAdapter);
 
-            ListView expenseList = (ListView) rootView.findViewById((R.id.expenseList));
+ //           ListView expenseList = (ListView) rootView.findViewById((R.id.expenseList));
+/*****************/
+            ExpandableListView eExpenseList = (ExpandableListView) rootView.findViewById(R.id.eExpenseList);
 
-            ExpenseAdapter expenseAdapter = new ExpenseAdapter(getActivity().getBaseContext(),activeExpenseGroup.getExpenses());
-            expenseList.setAdapter(expenseAdapter);
+            LinkedHashMap<String, List<String>> mappedDetails = new LinkedHashMap<>();
+
+            ArrayList<String> affectedNames;
+            ArrayList<Expense> expenses = activeExpenseGroup.getExpenses();
+            for(Expense e : expenses){
+                affectedNames = new ArrayList<>();
+                for(long aId : e.getAffectedMembersIds()){
+                    Person member = activeExpenseGroup.getMemberById(aId);
+                    if(member != null) {
+                        affectedNames.add(member.getName());
+                    }
+                }
+                mappedDetails.put(e.getTitle(), affectedNames);
+            }
+
+            ExpenseExpandAdapter expenseAdapter = new ExpenseExpandAdapter(getActivity(),
+                    expenses,
+                    mappedDetails
+                    );
+
+            eExpenseList.setAdapter(expenseAdapter);
+/********************/
+
+//            ExpenseAdapter expenseAdapter = new ExpenseAdapter(getActivity().getBaseContext(),activeExpenseGroup.getExpenses());
+//            expenseList.setAdapter(expenseAdapter);
 
             Button addExpenseButton = (Button) rootView.findViewById(R.id.addExpenseButton);
             addExpenseButton.setOnClickListener(new View.OnClickListener() {
@@ -239,7 +272,7 @@ public class MainActivity extends ActionBarActivity
             });
 
             TextView totalGroupExpenses = (TextView) rootView.findViewById(R.id.totalExpenseTextView);
-            totalGroupExpenses.setText("Groups Total: " + expenseAdapter.getTotalExpenses() + "kr");
+            //totalGroupExpenses.setText("Groups Total: " + expenseAdapter.getTotalExpenses() + "kr");
 
             return rootView;
         }

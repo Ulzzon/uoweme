@@ -19,12 +19,22 @@ public class MembersAdapter extends BaseAdapter {
     private final Context context;
     private ArrayList<Person> myPersons;
     private LayoutInflater inflater = null;
+    private ArrayList<Expense> expenses;
 
     MembersAdapter(Context context, ArrayList<Person> persons){
 
         this.context = context;
         myPersons = persons;
 
+        inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    MembersAdapter(Context context, ArrayList<Person> persons, ArrayList<Expense> expenses){
+
+        this.context = context;
+        myPersons = persons;
+        this.expenses = expenses;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -58,9 +68,20 @@ public class MembersAdapter extends BaseAdapter {
         TextView phoneNrView = (TextView) vi.findViewById(R.id.memberPhoneNr);
         phoneNrView.setText(member.getNumber());
         TextView expenseView = (TextView) vi.findViewById(R.id.membersExpense);
-        expenseView.setTextColor(Color.RED);
-        expenseView.setText("Expense: -340");
 
+        if(expenses != null) {
+            CalculateExpenses calculator = CalculateExpenses.INSTANCE;
+            int debt = calculator.calculateIndividualTotal(member, expenses);
+            if(debt < 0){
+                expenseView.setTextColor(Color.RED);
+            }else{
+                expenseView.setTextColor(Color.GREEN);
+            }
+            expenseView.setText("Expense: " + debt);
+        }else {
+            expenseView.setText("Expense: -443");
+        }
         return vi;
     }
+
 }

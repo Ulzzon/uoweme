@@ -26,16 +26,18 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="44dp" />
 
-    <ListView
-
+    <ExpandableListView
+        android:id="@+id/eExpenseList"
         android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:layout_weight=".50"
-        android:id="@+id/expenseList"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/section_label"
+        android:layout_above="@+id/memberList"
         android:layout_alignRight="@id/strut"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        >
+    </ExpandableListView>
 
     <TextView
         android:id="@+id/totalExpenseTextView"

@@ -57,6 +57,15 @@ public class ExpenseGroup {
         return members;
     }
 
+    public Person getMemberById(long personId){
+        for(Person p : members){
+            if(p.getDbId() == personId){
+                return p;
+            }
+        }
+        return null;
+    }
+
     public void setDbID (long id){this.dbID = id;}
 
     public long getDbID(){return dbID;}
