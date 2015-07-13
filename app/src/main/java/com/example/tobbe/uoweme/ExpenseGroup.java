@@ -11,11 +11,9 @@ public class ExpenseGroup {
     private long dbID = 1;
     private String mTitle = "New Group";
     private String mDescription = "";
-    private ArrayList<Person> members = new ArrayList<Person>();
-    private String dbMembersString = "";
-    private long[] membersId = {0};      // TODO: use this instead of membersString
+    private ArrayList<Person> members = new ArrayList<>();
+    private long[] membersId = {0};
     private long[] expenseId = {0};
-    private static final String COMMA_SEP = ", ";
     private ArrayList<Expense> expenses = new ArrayList<>();
 
     private String LOG = "ExpenseGroup: ";
@@ -70,11 +68,6 @@ public class ExpenseGroup {
 
     public long getDbID(){return dbID;}
 
-// TODO: Remove string and use array for members instead
-//    public void setDbMembersString(String membersString){ this.dbMembersString = membersString; }
-
- //   public String getDbMembersString(){ return dbMembersString; }
-
     public void setMembersArray(long[] membersIds){
         this.membersId = membersIds;
     }
@@ -124,7 +117,6 @@ public class ExpenseGroup {
                 MainActivity.db.deletePerson(p.getDbId());
             }
             members.clear();
-            dbMembersString = "";
             MainActivity.db.updateGroup(this);
         }
     }

@@ -8,7 +8,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,11 +24,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.tobbe.uoweme.adapters.ExpenseExpandAdapter;
+import com.example.tobbe.uoweme.adapters.GroupAdapter;
+import com.example.tobbe.uoweme.adapters.MembersAdapter;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import helper.Communicator;
 import helper.DatabaseHelper;
 
 
@@ -50,6 +59,15 @@ public class MainActivity extends ActionBarActivity
 
     public static android.support.v4.app.FragmentManager fragmentManager;
 
+    private Socket mSocket;
+    {
+        try{
+            mSocket = IO.socket("http://192.168.1.246:8888");
+            Log.d("Communicator","Setting up socket");
+        }catch (Exception e){
+            Log.d("Socket", "ERROR: " +e.toString());
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +84,13 @@ public class MainActivity extends ActionBarActivity
         fragmentManager = getSupportFragmentManager();
 
 
+        mSocket.on("hand_shake", handShakeListener);
+        if(mSocket != null){
+            mSocket.connect();
+        }
+
+        //getSocket.connect();    TODO: add this when server is up
+
     }
 
     @Override
@@ -78,10 +103,46 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
+    private Emitter.Listener handShakeListener = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    try{
+                        mSocket.emit("hand_shake_ok", "hello");
+                    }catch (Exception e){
+                        Log.d("emit", "Handshake failed");
+                        return;
+                    }
+
+                }
+            });
+//            J
+
+            //int numUsers;
+            //try {
+                //numUsers = data.getInt("numUsers");
+            //} catch (JSONException e) {
+            //    return;
+            //}
+
+            //Intent intent = new Intent();
+            //intent.putExtra("handshake", "ok");
+            //intent.putExtra("username", mUsername);
+            //intent.putExtra("numUsers", numUsers);
+            //setResult(RESULT_OK, intent);
+            //finish();
+        }
+    };
+
     @Override
     public void onDestroy(){
         db.updateGroup(GroupAdapter.getExpenseGroup(activeGroupId));
         super.onDestroy();
+        mSocket.disconnect();
+        mSocket.off("hand_shake", handShakeListener);
     }
 
     public void onSectionAttached(String title) {
@@ -207,13 +268,7 @@ public class MainActivity extends ActionBarActivity
                 listOfMembers.add(p.getName());
             }
             ListView membersList = (ListView) rootView.findViewById(R.id.memberList);
-/*
-            ArrayAdapter<String> membersAdapter = new ArrayAdapter<>(getActivity().getBaseContext(),
-                    R.layout.item_member_list,
-                    R.id.memberName,
-                    listOfMembers);
 
-*/
             MembersAdapter membersAdapter = new MembersAdapter(getActivity().getBaseContext(),
                     activeExpenseGroup.getMembers(),
                     activeExpenseGroup.getExpenses());
@@ -226,15 +281,12 @@ public class MainActivity extends ActionBarActivity
                     expenseActivityIntent.putExtra(getString(R.string.member_db_id), id);
                     startActivity(expenseActivityIntent);
                 }
-
             });
             membersList.setAdapter(membersAdapter);
 
- //           ListView expenseList = (ListView) rootView.findViewById((R.id.expenseList));
-/*****************/
             ExpandableListView eExpenseList = (ExpandableListView) rootView.findViewById(R.id.eExpenseList);
 
-            LinkedHashMap<String, List<String>> mappedDetails = new LinkedHashMap<>();
+            LinkedHashMap<Long, List<String>> mappedDetails = new LinkedHashMap<>();
 
             ArrayList<String> affectedNames;
             ArrayList<Expense> expenses = activeExpenseGroup.getExpenses();
@@ -246,7 +298,7 @@ public class MainActivity extends ActionBarActivity
                         affectedNames.add(member.getName());
                     }
                 }
-                mappedDetails.put(e.getTitle(), affectedNames);
+                mappedDetails.put(e.getDbId(), affectedNames);
             }
 
             ExpenseExpandAdapter expenseAdapter = new ExpenseExpandAdapter(getActivity(),
@@ -255,10 +307,6 @@ public class MainActivity extends ActionBarActivity
                     );
 
             eExpenseList.setAdapter(expenseAdapter);
-/********************/
-
-//            ExpenseAdapter expenseAdapter = new ExpenseAdapter(getActivity().getBaseContext(),activeExpenseGroup.getExpenses());
-//            expenseList.setAdapter(expenseAdapter);
 
             Button addExpenseButton = (Button) rootView.findViewById(R.id.addExpenseButton);
             addExpenseButton.setOnClickListener(new View.OnClickListener() {
@@ -272,7 +320,7 @@ public class MainActivity extends ActionBarActivity
             });
 
             TextView totalGroupExpenses = (TextView) rootView.findViewById(R.id.totalExpenseTextView);
-            //totalGroupExpenses.setText("Groups Total: " + expenseAdapter.getTotalExpenses() + "kr");
+            totalGroupExpenses.setText("Groups Total: " + expenseAdapter.getTotalExpenses() + "kr");
 
             return rootView;
         }

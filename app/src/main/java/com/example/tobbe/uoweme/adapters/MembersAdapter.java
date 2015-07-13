@@ -1,4 +1,4 @@
-package com.example.tobbe.uoweme;
+package com.example.tobbe.uoweme.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,7 +8,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.tobbe.uoweme.Expense;
+import com.example.tobbe.uoweme.Person;
+import com.example.tobbe.uoweme.R;
+
 import java.util.ArrayList;
+
+import helper.CalculateExpenses;
 
 /**
  * Created by TobiasOlsson on 15-05-17.
@@ -21,7 +27,7 @@ public class MembersAdapter extends BaseAdapter {
     private LayoutInflater inflater = null;
     private ArrayList<Expense> expenses;
 
-    MembersAdapter(Context context, ArrayList<Person> persons){
+    public MembersAdapter(Context context, ArrayList<Person> persons){
 
         this.context = context;
         myPersons = persons;
@@ -30,7 +36,7 @@ public class MembersAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    MembersAdapter(Context context, ArrayList<Person> persons, ArrayList<Expense> expenses){
+    public MembersAdapter(Context context, ArrayList<Person> persons, ArrayList<Expense> expenses){
 
         this.context = context;
         myPersons = persons;
@@ -70,7 +76,7 @@ public class MembersAdapter extends BaseAdapter {
         TextView expenseView = (TextView) vi.findViewById(R.id.membersExpense);
 
         if(expenses != null) {
-            CalculateExpenses calculator = CalculateExpenses.INSTANCE;
+            CalculateExpenses calculator = new CalculateExpenses();
             int debt = calculator.calculateIndividualTotal(member, expenses);
             if(debt < 0){
                 expenseView.setTextColor(Color.RED);

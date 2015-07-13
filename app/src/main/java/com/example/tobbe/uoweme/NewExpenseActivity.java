@@ -1,12 +1,9 @@
 package com.example.tobbe.uoweme;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,7 +11,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.beans.IndexedPropertyChangeEvent;
+import com.example.tobbe.uoweme.adapters.GroupAdapter;
+
 import java.util.ArrayList;
 
 
@@ -95,23 +93,22 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
             addingExpense.setAmount(Integer.parseInt(amountText.getText().toString()));
         } catch (Exception e){
             Log.d(LOG, "Failed to parse Integer");
+            return false;
         }
         addingExpense.setTitle(titleText.getText().toString());
         addingExpense.setOwnerId(memberId);
 
-        boolean noneSelected = true;
         SparseBooleanArray checked = listAllMembers.getCheckedItemPositions();
-        long[] membersDbIds = new long[checked.size()];
-        ArrayList<Person> members = group.getMembers();
-        for(int i = 0; i < checked.size(); i++){
-            if(checked.get(i)){
-                membersDbIds[i] = members.get(i).getDbId();
-                noneSelected = false;
-            }
-        }
-        if(noneSelected){
+        if(checked.size() == 0){
             return false;
         }
+        long[] membersDbIds = new long[checked.size()];
+        ArrayList<Person> members = group.getMembers();
+
+        for(int k = 0; k < checked.size(); k++){
+            membersDbIds[k] = members.get(checked.keyAt(k)).getDbId();
+        }
+
         addingExpense.setAffectedMembersIds(membersDbIds);
 
         group.addExpense(addingExpense);

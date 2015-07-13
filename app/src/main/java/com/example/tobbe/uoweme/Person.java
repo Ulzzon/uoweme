@@ -7,7 +7,7 @@ public class Person {
 
     private String number = "null";
     private String name = "none";
-    private long dbId = 0;
+    private long dbId = 1;
 
     public Person(){}
     public Person(String name, String number){

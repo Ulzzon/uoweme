@@ -9,11 +9,32 @@
         <dex dex="/Users/TobiasOlsson/AndroidStudioProjects/UOweMe/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-d1de89cbc467161ac2ebc4d15245493332db4fae.jar" />
     </item>
     <item
+        jar="/Users/TobiasOlsson/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp-ws/2.4.0/69206d28966656052a982ceded583abdeb41cf63/okhttp-ws-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="69206d28966656052a982ceded583abdeb41cf63">
+        <dex dex="/Users/TobiasOlsson/AndroidStudioProjects/UOweMe/app/build/intermediates/pre-dexed/debug/okhttp-ws-2.4.0-c3d7c1675f8a8f6c833f13ef869acb1df4283930.jar" />
+    </item>
+    <item
+        jar="/Users/TobiasOlsson/.gradle/caches/modules-2/files-2.1/com.github.nkzawa/socket.io-client/0.5.2/41182e10002a59498572181410172744abd0f637/socket.io-client-0.5.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="41182e10002a59498572181410172744abd0f637">
+        <dex dex="/Users/TobiasOlsson/AndroidStudioProjects/UOweMe/app/build/intermediates/pre-dexed/debug/socket.io-client-0.5.2-5a43f6dac6e203ad28bf4cb3cc2944238e48006c.jar" />
+    </item>
+    <item
         jar="/Users/TobiasOlsson/AndroidStudioProjects/UOweMe/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="d84409890828e07d344a3b9b1da545dba9897b51">
         <dex dex="/Users/TobiasOlsson/AndroidStudioProjects/UOweMe/app/build/intermediates/pre-dexed/debug/classes-3a28754d86e96f0ca6f0e76b7ce8353c9e674b3b.jar" />
+    </item>
+    <item
+        jar="/Users/TobiasOlsson/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.4.0/40340c0748190fe897baf7bffbc1b282734294e5/okhttp-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="/Users/TobiasOlsson/AndroidStudioProjects/UOweMe/app/build/intermediates/pre-dexed/debug/okhttp-2.4.0-cf49798a1c40546c8b4ce22b621f2e0fa40518b7.jar" />
     </item>
     <item
         jar="/Users/TobiasOlsson/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
@@ -28,6 +49,20 @@
         revision="21.1.2"
         sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
         <dex dex="/Users/TobiasOlsson/AndroidStudioProjects/UOweMe/app/build/intermediates/pre-dexed/debug/classes-b85b8d87428508350b089cc79ec118d9f86d386d.jar" />
+    </item>
+    <item
+        jar="/Users/TobiasOlsson/.gradle/caches/modules-2/files-2.1/com.github.nkzawa/engine.io-client/0.5.1/c83503e6668d63b3d5b2a27edf6e3a54d9eb7a66/engine.io-client-0.5.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c83503e6668d63b3d5b2a27edf6e3a54d9eb7a66">
+        <dex dex="/Users/TobiasOlsson/AndroidStudioProjects/UOweMe/app/build/intermediates/pre-dexed/debug/engine.io-client-0.5.1-ea1b47cee2dd90af783497fcb325b59fb69f1be6.jar" />
+    </item>
+    <item
+        jar="/Users/TobiasOlsson/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.4.0/5b72bf48563ea8410e650de14aa33ff69a3e8c35/okio-1.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
+        <dex dex="/Users/TobiasOlsson/AndroidStudioProjects/UOweMe/app/build/intermediates/pre-dexed/debug/okio-1.4.0-2711183d1288562ffd730e690bf94925b207d40f.jar" />
     </item>
 
 </items>

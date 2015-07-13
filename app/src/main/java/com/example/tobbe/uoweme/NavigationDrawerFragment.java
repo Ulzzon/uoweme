@@ -23,6 +23,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import com.example.tobbe.uoweme.adapters.GroupAdapter;
+
 import helper.DatabaseHelper;
 
 /**

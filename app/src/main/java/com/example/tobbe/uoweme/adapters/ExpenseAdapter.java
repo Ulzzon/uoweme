@@ -1,4 +1,4 @@
-package com.example.tobbe.uoweme;
+package com.example.tobbe.uoweme.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.tobbe.uoweme.Expense;
+import com.example.tobbe.uoweme.R;
 
 import java.util.ArrayList;
 import java.util.Objects;

@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+
+import com.example.tobbe.uoweme.adapters.GroupAdapter;
 
 /**
  * Created by TobiasOlsson on 15-03-21.

@@ -21,18 +21,18 @@ import com.example.tobbe.uoweme.R;
 public class ExpenseExpandAdapter extends BaseExpandableListAdapter {
 
     private Activity context;
-    private Map<String, List<String>> expenseDetails;
+    private Map<Long, List<String>> expenseDetails;
     private ArrayList<Expense> expenses;
 
     public ExpenseExpandAdapter(Activity context, ArrayList<Expense> expenses,
-                                 Map<String, List<String>> expenseDetails) {
+                                 Map<Long, List<String>> expenseDetails) {
         this.context = context;
         this.expenseDetails = expenseDetails;
         this.expenses = expenses;
     }
 
     public Object getChild(int groupPosition, int childPosition) {
-        return expenseDetails.get(expenses.get(groupPosition).getTitle()).get(childPosition);
+        return expenseDetails.get(expenses.get(groupPosition).getDbId()).get(childPosition);
     }
 
     public long getChildId(int groupPosition, int childPosition) {
@@ -83,7 +83,7 @@ public class ExpenseExpandAdapter extends BaseExpandableListAdapter {
     }
 
     public int getChildrenCount(int groupPosition) {
-        return expenseDetails.get(expenses.get(groupPosition).getTitle()).size();
+        return expenseDetails.get(expenses.get(groupPosition).getDbId()).size();
     }
 
     public Expense getGroup(int groupPosition) {
@@ -125,4 +125,13 @@ public class ExpenseExpandAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
+    public int getTotalExpenses(){
+        int total = 0;
+        for(Expense e : expenses){
+            total += e.getAmount();
+        }
+        return total;
+    }
 }
+
