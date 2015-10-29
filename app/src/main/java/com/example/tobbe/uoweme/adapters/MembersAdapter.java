@@ -2,6 +2,7 @@ package com.example.tobbe.uoweme.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,12 +79,22 @@ public class MembersAdapter extends BaseAdapter {
         if(expenses != null) {
             CalculateExpenses calculator = new CalculateExpenses();
             int debt = calculator.calculateIndividualTotal(member, expenses);
-            if(debt < 0){
+            /*if(debt < 0){
                 expenseView.setTextColor(Color.RED);
             }else{
                 expenseView.setTextColor(Color.GREEN);
             }
             expenseView.setText("Expense: " + debt);
+            */
+            if( debt < 0){
+                expenseView.setText(Html.fromHtml("<font color=#000000>Expense: </font> <font color=#ff0000>" + debt + "</font>"));
+            }
+            else if( debt > 0){
+                expenseView.setText(Html.fromHtml("<font color=#000000>Expense: </font> <font color=#009933>" + debt + "</font>"));
+            }
+            else {
+                expenseView.setText("Expense: " + debt);
+            }
         }else {
             expenseView.setText("Expense: -443");
         }

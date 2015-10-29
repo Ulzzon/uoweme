@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.tobbe.uoweme.ExpenseGroup;
-import com.example.tobbe.uoweme.MainActivity;
+import com.example.tobbe.uoweme.Activities.MainActivity;
 import com.example.tobbe.uoweme.R;
 
 import java.util.ArrayList;

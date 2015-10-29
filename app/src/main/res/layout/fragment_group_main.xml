@@ -15,7 +15,11 @@
 
     <TextView android:id="@+id/section_label"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/strut"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -24,17 +28,16 @@
         android:id="@+id/addExpenseButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="44dp" />
+        android:layout_marginBottom="10dp" />
 
     <ExpandableListView
         android:id="@+id/eExpenseList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/section_label"
-        android:layout_above="@+id/memberList"
+        android:layout_above="@+id/membersHeader"
         android:layout_alignRight="@id/strut"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="20dp"
         >
     </ExpandableListView>
@@ -45,8 +48,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/strut"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/section_label"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:text="Total"/>
 
 
@@ -72,6 +76,17 @@
         android:layout_alignParentStart="true"
         android:headerDividersEnabled="false"
         android:stackFromBottom="false" />
+
+    <TextView
+        android:id="@+id/membersHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/strut"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@id/memberList"
+        android:layout_marginTop="5dp"
+        android:text="Members"
+        android:textStyle="bold"/>
 
 
 

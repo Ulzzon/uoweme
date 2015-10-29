@@ -2,6 +2,8 @@ package com.example.tobbe.uoweme;
 
 import android.util.Log;
 
+import com.example.tobbe.uoweme.Activities.MainActivity;
+
 import java.util.ArrayList;
 
 /**

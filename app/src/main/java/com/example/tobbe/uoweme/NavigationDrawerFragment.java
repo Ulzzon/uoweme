@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import com.example.tobbe.uoweme.Activities.MainActivity;
 import com.example.tobbe.uoweme.adapters.GroupAdapter;
 
 import helper.DatabaseHelper;
@@ -232,8 +233,8 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

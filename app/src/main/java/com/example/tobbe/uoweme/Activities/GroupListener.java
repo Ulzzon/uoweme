@@ -1,4 +1,4 @@
-package com.example.tobbe.uoweme;
+package com.example.tobbe.uoweme.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.tobbe.uoweme.Activities.MainActivity;
+import com.example.tobbe.uoweme.ExpenseGroup;
+import com.example.tobbe.uoweme.NavigationDrawerFragment;
+import com.example.tobbe.uoweme.R;
 import com.example.tobbe.uoweme.adapters.GroupAdapter;
 
 /**

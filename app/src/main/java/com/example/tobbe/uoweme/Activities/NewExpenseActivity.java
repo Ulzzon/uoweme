@@ -1,4 +1,4 @@
-package com.example.tobbe.uoweme;
+package com.example.tobbe.uoweme.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.tobbe.uoweme.Expense;
+import com.example.tobbe.uoweme.ExpenseGroup;
+import com.example.tobbe.uoweme.Person;
+import com.example.tobbe.uoweme.R;
 import com.example.tobbe.uoweme.adapters.GroupAdapter;
 
 import java.util.ArrayList;

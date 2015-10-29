@@ -2,10 +2,11 @@ package helper;
 
 import com.example.tobbe.uoweme.Expense;
 import com.example.tobbe.uoweme.ExpenseGroup;
+import com.example.tobbe.uoweme.PaymentClass;
 import com.example.tobbe.uoweme.Person;
+import com.example.tobbe.uoweme.adapters.PaymentsAdapter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ import java.util.Map;
  */
 public class CalculateExpenses {
 
-    private int calculateDebt(Person individual, ArrayList<Expense> expenses){
+    private int calculateIndividualDebt(Person individual, ArrayList<Expense> expenses){
         long individualDbId = individual.getDbId();
         int debtAmount = 0;
         long[] tmpAffectedIds;
@@ -49,7 +50,7 @@ public class CalculateExpenses {
 
     public int calculateIndividualTotal(Person individual, ArrayList<Expense> expenses){
         int total = 0;
-        total = calculateIndividualExpense(individual,expenses) - calculateDebt(individual,expenses);
+        total = calculateIndividualExpense(individual,expenses) - calculateIndividualDebt(individual, expenses);
         return total;
     }
 
@@ -58,16 +59,16 @@ public class CalculateExpenses {
         ArrayList<Person> members = group.getMembers();
         ArrayList<Expense> expenses = group.getExpenses();
         //expenses = sortArrayList(expenses);
-        LinkedHashMap<Long, Integer> personalPositiveExpenseMap = new LinkedHashMap<>();  // Have bigger expenses then debts
-        LinkedHashMap<Long, Integer> personalNegativeExpenseMap = new LinkedHashMap<>();  // Have bigger debts then expenses
+        LinkedHashMap<Person, Integer> personalPositiveExpenseMap = new LinkedHashMap<>();  // Have bigger expenses then debts
+        LinkedHashMap<Person, Integer> personalNegativeExpenseMap = new LinkedHashMap<>();  // Have bigger debts then expenses
 
         for(Person p : members){
             int pExpense = calculateIndividualTotal(p, expenses);
             if(pExpense > 0){
-                personalPositiveExpenseMap.put(p.getDbId(), pExpense);
+                personalPositiveExpenseMap.put(p, pExpense);
             }
             else if(pExpense < 0){
-                personalNegativeExpenseMap.put(p.getDbId(), Math.abs(pExpense));
+                personalNegativeExpenseMap.put(p, Math.abs(pExpense));
             }   // else person has no expenses or debts
         }
 
@@ -92,18 +93,23 @@ public class CalculateExpenses {
         }
     }
 
-    private void findPaymentSuggestion(Map<Long, Integer> positiveExpenses, Map<Long, Integer> negativeExpenses){
-        LinkedHashMap<Long, List<Long>> solvedPersonMap = new LinkedHashMap<>();
-        List<Long> payOfDebtTo = new LinkedList<>();    // Store keys (dbId) for persons to pay of debt to
+    private void findPaymentSuggestion(Map<Person, Integer> positiveExpenses, Map<Person, Integer> negativeExpenses){
+        //LinkedHashMap<Person, List<Long>> solvedPersonMap = new LinkedHashMap<>();
+        ArrayList<PaymentClass> solvedPayments;
+        //List<Long> payOfDebtTo = new LinkedList<>();    // Store keys (dbId) for persons to pay of debt to
 
         OuterLoop:
-        for (Map.Entry<Long, Integer> positive : positiveExpenses.entrySet()) {
+        for (Map.Entry<Person, Integer> positive : positiveExpenses.entrySet()) {
             // First see to find perfect match
+            PaymentClass payment = new PaymentClass();
             if (negativeExpenses.containsValue(positive.getValue())) {
-                for (Map.Entry<Long, Integer> negative : negativeExpenses.entrySet())
+                for (Map.Entry<Person, Integer> negative : negativeExpenses.entrySet())
                 {
                     if(positive.getValue() == negative.getValue()){
-                        payOfDebtTo.add(positive.getKey());
+                        //payOfDebtTo.add(positive.getKey());
+                        payment.setPersonToPay(negative.getKey());
+                        payment.setReceiver(positive.getKey());
+                        payment.setAmount(positive.getValue());
                         positiveExpenses.remove(positive.getKey());
                         negativeExpenses.remove(negative.getKey());
                         break;
@@ -111,10 +117,13 @@ public class CalculateExpenses {
                 }
              //Second see if we can pay of everything to one person
             }else{
-                for (Map.Entry<Long, Integer> negative : negativeExpenses.entrySet())
+                for (Map.Entry<Person, Integer> negative : negativeExpenses.entrySet())
                 {
                     if(positive.getValue() > negative.getValue()){
-                        payOfDebtTo.add(positive.getKey());
+                        //payOfDebtTo.add(positive.getKey());
+                        payment.setPersonToPay(negative.getKey());
+                        payment.setReceiver(positive.getKey());
+                        payment.setAmount(negative.getValue());
                         positiveExpenses.put(positive.getKey(), positive.getValue()-negative.getValue());
                         negativeExpenses.remove(negative.getKey());
                         continue OuterLoop;
@@ -128,10 +137,10 @@ public class CalculateExpenses {
 
 
         // TODO: Continue here to get
-        for (Map.Entry<Long, Integer> positive : positiveExpenses.entrySet()) {
-            for (Map.Entry<Long, Integer> negative : negativeExpenses.entrySet()) {
+        for (Map.Entry<Person, Integer> positive : positiveExpenses.entrySet()) {
+            for (Map.Entry<Person, Integer> negative : negativeExpenses.entrySet()) {
                 if (positive.getValue() < negative.getValue()) {
-                    payOfDebtTo.add(positive.getKey());
+                    //payOfDebtTo.add(positive.getKey());
                     positiveExpenses.put(positive.getKey(), positive.getValue() - negative.getValue());
                     negativeExpenses.remove(negative.getKey());
                     break;
@@ -156,34 +165,34 @@ public class CalculateExpenses {
 
 
 
-        public LinkedHashMap sortHashMapByValuesD(HashMap passedMap) {
-            List mapKeys = new ArrayList(passedMap.keySet());
-            List mapValues = new ArrayList(passedMap.values());
-            Collections.sort(mapValues);
-            Collections.sort(mapKeys);
+    public LinkedHashMap sortHashMapByValuesD(HashMap passedMap) {
+        List mapKeys = new ArrayList(passedMap.keySet());
+        List mapValues = new ArrayList(passedMap.values());
+        Collections.sort(mapValues);
+        Collections.sort(mapKeys);
 
-            LinkedHashMap sortedMap = new LinkedHashMap();
+        LinkedHashMap sortedMap = new LinkedHashMap();
 
-            Iterator valueIt = mapValues.iterator();
-            while (valueIt.hasNext()) {
-                Object val = valueIt.next();
-                Iterator keyIt = mapKeys.iterator();
+        Iterator valueIt = mapValues.iterator();
+        while (valueIt.hasNext()) {
+            Object val = valueIt.next();
+            Iterator keyIt = mapKeys.iterator();
 
-                while (keyIt.hasNext()) {
-                    Object key = keyIt.next();
-                    String comp1 = passedMap.get(key).toString();
-                    String comp2 = val.toString();
+            while (keyIt.hasNext()) {
+                Object key = keyIt.next();
+                String comp1 = passedMap.get(key).toString();
+                String comp2 = val.toString();
 
-                    if (comp1.equals(comp2)){
-                        passedMap.remove(key);
-                        mapKeys.remove(key);
-                        sortedMap.put((String)key, (Double)val);
-                        break;
-                    }
-
+                if (comp1.equals(comp2)){
+                    passedMap.remove(key);
+                    mapKeys.remove(key);
+                    sortedMap.put((String)key, (Double)val);
+                    break;
                 }
 
             }
-            return sortedMap;
+
         }
+        return sortedMap;
+    }
 }
