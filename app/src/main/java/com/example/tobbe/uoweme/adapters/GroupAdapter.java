@@ -105,10 +105,7 @@ public class GroupAdapter extends BaseAdapter{
         return vi;
     }
 
-    public void addGroup(String title, String description){
-        addGroup(new ExpenseGroup(title, description));
-//        myGroups.add(new ExpenseGroup(title, description));
-    }
+
     public void addGroup(ExpenseGroup expenseGroup){
         //long rowId = MainActivity.mDbHelper.saveGroupsToDb(expenseGroup);
         //expenseGroup.setDbID(rowId);

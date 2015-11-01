@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import helper.CalculateExpenses;
 import helper.DatabaseHelper;
 
 
@@ -90,8 +91,6 @@ public class MainActivity extends ActionBarActivity
         if(mSocket != null){
             mSocket.connect();
         }
-
-        //getSocket.connect();    TODO: add this when server is up
 
     }
 
@@ -231,7 +230,7 @@ public class MainActivity extends ActionBarActivity
          * fragment.
          */
         private String LOG = "GroupViewFragment";
-
+        private ExpenseGroup activeExpenseGroup;
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_SECTION_TITLE = "section_title";
 
@@ -256,7 +255,7 @@ public class MainActivity extends ActionBarActivity
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_group_main, container, false);
             TextView description = (TextView) rootView.findViewById(R.id.section_label);
-            ExpenseGroup activeExpenseGroup = new ExpenseGroup();
+            activeExpenseGroup = new ExpenseGroup();
             int position = getArguments().getInt(ARG_SECTION_NUMBER);
             try {
                 activeExpenseGroup = GroupAdapter.getExpenseGroup(position);
@@ -325,6 +324,7 @@ public class MainActivity extends ActionBarActivity
             addExpenseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    CalculateExpenses.getInstance().calculateSplitPayment(activeExpenseGroup);
                     Intent expenseActivityIntent = new Intent(getActivity().getBaseContext().getString(R.string.new_payment_intent));
                     expenseActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(expenseActivityIntent);
@@ -410,7 +410,7 @@ public class MainActivity extends ActionBarActivity
 
             Button addMember = (Button) rootView.findViewById(R.id.addMember);
             addMember.setOnClickListener(new GroupListener(mContext));
-            membersList.setOnItemLongClickListener(new GroupListener.GroupLongListener());
+            membersList.setOnItemLongClickListener(new GroupListener.GroupLongListener(getActivity()));
             Button createButton = (Button) rootView.findViewById(R.id.createGroupButton);
             createButton.setOnClickListener(new GroupListener(mContext, rootView));
             EditText titleText = (EditText) rootView.findViewById(R.id.titleText);

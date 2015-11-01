@@ -1,12 +1,14 @@
 package com.example.tobbe.uoweme;
 
+import android.util.Log;
+
 /**
  * Created by TobiasOlsson on 15-10-29.
  */
 public class PaymentClass {
     private Person personToPay;
     private Person receiver;
-    private int amount;
+    private int amount = 0;
 
     public PaymentClass(){
 
@@ -16,6 +18,8 @@ public class PaymentClass {
         this.personToPay = personToPay;
         this.receiver = receivingPerson;
         this.amount = amount;
+        Log.d("PaymentClass", "New payment found, PtP:" + personToPay.getName() + ", RP: " +
+                receivingPerson.getName() + ", amount: " + amount);
     }
 
     public Person getPersonToPay() {

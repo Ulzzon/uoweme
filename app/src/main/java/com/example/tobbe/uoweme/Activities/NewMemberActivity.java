@@ -37,13 +37,13 @@ public class NewMemberActivity extends Activity implements View.OnClickListener{
 
         cancelButton = (Button) findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(this);
-/*
+
         nameText = (EditText) findViewById(R.id.nameText);
-        nameText.setOnClickListener(this);
+//        nameText.setOnClickListener(this);
 
         phoneText = (EditText) findViewById(R.id.phoneText);
-        phoneText.setOnClickListener(this);
-*/
+//        phoneText.setOnClickListener(this);
+
     }
 
     @Override

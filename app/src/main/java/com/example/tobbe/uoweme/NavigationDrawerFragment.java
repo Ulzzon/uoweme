@@ -1,6 +1,8 @@
 package com.example.tobbe.uoweme;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -108,9 +110,25 @@ public class NavigationDrawerFragment extends Fragment {
         });
         mDrawerListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "Delete?", Toast.LENGTH_SHORT).show();
-                deleteItem(position);
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                //Toast.makeText(getActivity(), "Delete?", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(getActivity())
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(R.string.delete)
+                        .setMessage(R.string.delete_group)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Delete group
+
+                                deleteItem(position);
+
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
                 return false;
             }
         });
@@ -290,7 +308,7 @@ public class NavigationDrawerFragment extends Fragment {
     /**
      * Callbacks interface that all activities using this fragment must implement.
      */
-    public static interface NavigationDrawerCallbacks {
+    public interface NavigationDrawerCallbacks {
         /**
          * Called when an item in the navigation drawer is selected.
          */

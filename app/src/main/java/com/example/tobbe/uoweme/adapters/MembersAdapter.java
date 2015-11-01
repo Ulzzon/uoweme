@@ -77,8 +77,8 @@ public class MembersAdapter extends BaseAdapter {
         TextView expenseView = (TextView) vi.findViewById(R.id.membersExpense);
 
         if(expenses != null) {
-            CalculateExpenses calculator = new CalculateExpenses();
-            int debt = calculator.calculateIndividualTotal(member, expenses);
+            //CalculateExpenses calculator = new CalculateExpenses();
+            int debt = CalculateExpenses.getInstance().calculateIndividualTotal(member, expenses);
             /*if(debt < 0){
                 expenseView.setTextColor(Color.RED);
             }else{
