@@ -2,6 +2,7 @@ package com.example.tobbe.uoweme.adapters;
 
 import android.content.Context;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,10 @@ public class PaymentsAdapter extends BaseAdapter{
 
         this.context = context;
         this.payments = payments;
+        int size = payments.size();
+        Log.d("PaymentAdapter", "Size of array: " + size);
+        inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -58,16 +63,13 @@ public class PaymentsAdapter extends BaseAdapter{
             vi = inflater.inflate(R.layout.item_payment_list, null);
         }
 
-        //Person member = myPersons.get(position);
         PaymentClass payment = payments.get(position);
         TextView payingPersonView = (TextView) vi.findViewById(R.id.fromPerson_TV);
         payingPersonView.setText(payment.getPersonToPay().getName());
-        //nameView.setText(member.getName());
         TextView receivingPersonView = (TextView) vi.findViewById(R.id.toPerson_TV);
         receivingPersonView.setText(payment.getReceiver().getName());
-        //phoneNrView.setText(member.getNumber());
         TextView amountToPayView = (TextView) vi.findViewById(R.id.payAmount_TV);
-        amountToPayView.setText(payment.getAmount());
+        amountToPayView.setText("Amount: " + payment.getAmount());
 
         return vi;
     }

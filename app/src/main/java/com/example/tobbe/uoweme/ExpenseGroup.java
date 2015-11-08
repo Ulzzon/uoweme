@@ -89,12 +89,10 @@ public class ExpenseGroup {
                     Person newMember = MainActivity.db.getPerson(id);
                     if(!personExistAsMember(newMember)) {
                         members.add(newMember);
-                        //members.add(newMember);
                         Log.d(LOG, mTitle + " Add member: " + newMember.getName());
                     }else{
                         Log.d(LOG, "Member: " +newMember.getName() +" all ready exist");
                     }
-                    //members.add(MainActivity.db.getPerson(Long.parseLong(id)));
                 }
                 catch(Exception e){
                     Log.d(LOG, "Failed to get member: "+id);
@@ -129,7 +127,6 @@ public class ExpenseGroup {
         expenses.add(expense);
         MainActivity.db.saveExpenseToDb(expense);
         MainActivity.db.updateGroup(this);
-
     }
 
     public void deleteAllExpenses(){

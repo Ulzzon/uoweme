@@ -1,6 +1,7 @@
 package com.example.tobbe.uoweme.adapters;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,10 +60,10 @@ public class ExpenseAdapter extends BaseAdapter {
         Expense newExpense = expenses.get(position);
         title.setText(newExpense.getTitle());
         amount.setText("Cash: " +newExpense.getAmount());
-        //owner.setText("Owner: " +MainActivity.db.getPerson(newExpense.getOwnerId()).getName());
         owner.setText("OwnerId: " +newExpense.getOwnerId());
         return vi;
     }
+
 
     public void addExpense(Expense addExpense){
         expenses.add(addExpense);

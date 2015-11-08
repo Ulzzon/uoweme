@@ -21,27 +21,40 @@
     android:background="?android:attr/activatedBackgroundIndicator"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:orientation="vertical"
-    >
-
-
-    <TextView
-        android:id="@+id/fromPerson_TV"
+        >
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:orientation="horizontal"
+        android:weightSum="100">
 
-        android:layout_weight="1"
-        android:layout_gravity="top|left"
-        />
+        <TextView
+            android:id="@+id/fromPerson_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceListItem"
+
+            android:layout_weight="45"
+            android:layout_gravity="top|left"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/ic_menu_send"
+            android:layout_weight="10"
+            />
 
 
-    <TextView
-        android:id="@+id/toPerson_TV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:layout_marginLeft="15dp" />
+        <TextView
+            android:id="@+id/toPerson_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:layout_weight="45"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/payAmount_TV"

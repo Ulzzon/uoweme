@@ -119,6 +119,16 @@ public class GroupAdapter extends BaseAdapter{
         return myGroups.get(position);
     }
 
+    public static ExpenseGroup getGroupByDbId(long id){
+        for(ExpenseGroup e : myGroups)
+        {
+            if(e.getDbID() == id){
+                return e;
+            }
+        }
+        return null;
+    }
+
     public void removeGroup(int position){
         ExpenseGroup groupToDelete = myGroups.get(position);
         Log.d(LOG, "Delete Group: " + groupToDelete.getTitle() + " DbId: " + groupToDelete.getDbID());

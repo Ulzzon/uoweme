@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tobbe.uoweme.Expense;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 public class NewExpenseActivity extends Activity implements View.OnClickListener{
 
     private final String LOG = "NewExpenseActivity";//getLocalClassName();
+    private TextView expenseHeader;
     private EditText titleText;
     private EditText amountText;
     private Button createButton;
@@ -40,11 +42,12 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
         memberId = getIntent().getLongExtra(getString(R.string.member_db_id), 1);
         group = GroupAdapter.getExpenseGroup(groupId);
 
+        expenseHeader = (TextView) findViewById(R.id.expenseHeader);
+
+
         titleText = (EditText) findViewById(R.id.expenseTitleText);
-        titleText.setOnClickListener(this);
 
         amountText = (EditText) findViewById(R.id.expenseAmountText);
-        amountText.setOnClickListener(this);
 
         createButton = (Button) findViewById(R.id.createExpenseButton);
         createButton.setOnClickListener(this);
@@ -55,35 +58,36 @@ public class NewExpenseActivity extends Activity implements View.OnClickListener
         ArrayList<String> allNames = new ArrayList<>();
         ArrayList<Person> allMembers = group.getMembers();
         for(Person p : allMembers){
+            if(p.getDbId() == memberId)
+            {
+                expenseHeader.setText(p.getName());
+            }
             allNames.add(p.getName());
         }
         listAllMembers = (ListView) findViewById(R.id.listGroupMembers);
-        ArrayAdapter<String> membersAdapter = new ArrayAdapter<String>(getBaseContext(),
-                R.layout.item_member_list,
+        ArrayAdapter<String> membersAdapter = new ArrayAdapter<>(getBaseContext(),
+                R.layout.item_member_list_simple,
                 R.id.memberName,
                 allNames);
         listAllMembers.setAdapter(membersAdapter);
     }
 
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case(R.id.expenseTitle):
-                titleText.setText("");
-                break;
-            case(R.id.expenseAmount):
-                amountText.setText("");
-                break;
             case(R.id.createExpenseButton):
                 if(createNewExpense()){
+                    if (getParent() == null) {
+                        setResult(Activity.RESULT_OK);
+                    } else {
+                        getParent().setResult(Activity.RESULT_OK);
+                    }
                     this.finish();
                 }
                 else{
                     Toast.makeText(getBaseContext(), "Need to select effected members!", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
             case(R.id.cancelButton):
                 this.finish();

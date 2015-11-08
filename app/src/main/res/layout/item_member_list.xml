@@ -13,41 +13,59 @@
          See the License for the specific language governing permissions and
          limitations under the License.
     -->
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/memberItem"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:background="?android:attr/activatedBackgroundIndicator"
-android:minHeight="?android:attr/listPreferredItemHeightSmall"
-android:orientation="vertical"
-    >
-
-
-<TextView
-    android:id="@+id/memberName"
+    <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/memberItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceListItem"
+    android:background="?android:attr/activatedBackgroundIndicator"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:orientation="horizontal"
+    android:weightSum="100">
 
-    android:layout_weight="1"
-    android:layout_gravity="top|left"
-    />
-
-
-    <TextView
-        android:id="@+id/memberPhoneNr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:layout_marginLeft="15dp" />
-
-    <TextView
-        android:id="@+id/membersExpense"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/memberTextItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+        android:background="?android:attr/activatedBackgroundIndicator"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:orientation="vertical"
+        android:layout_weight="90"
+        >
+
+        <TextView
+            android:id="@+id/memberName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceListItem"
+
+            android:layout_weight="1"
+            android:layout_gravity="top|left"
+            />
 
 
+        <TextView
+            android:id="@+id/memberPhoneNr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:layout_marginLeft="15dp" />
+
+        <TextView
+            android:id="@+id/membersExpense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/addExpenseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="10"
+        android:background="@android:drawable/ic_input_add"/>
 </LinearLayout>

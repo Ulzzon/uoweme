@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.example.tobbe.uoweme.Expense;
 import com.example.tobbe.uoweme.ExpenseGroup;
 import com.example.tobbe.uoweme.NavigationDrawerFragment;
+import com.example.tobbe.uoweme.PaymentClass;
 import com.example.tobbe.uoweme.Person;
 import com.example.tobbe.uoweme.R;
 import com.example.tobbe.uoweme.adapters.ExpenseExpandAdapter;
@@ -233,6 +234,10 @@ public class MainActivity extends ActionBarActivity
         private ExpenseGroup activeExpenseGroup;
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_SECTION_TITLE = "section_title";
+        private final int expenseResultCode = 90;
+        private ExpandableListView eExpenseList;
+        private ListView membersList;
+
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -264,6 +269,10 @@ public class MainActivity extends ActionBarActivity
                 Log.d(LOG,"Not able to grab group"  );
             }
 
+            membersList = (ListView) rootView.findViewById(R.id.memberList);
+            eExpenseList = (ExpandableListView) rootView.findViewById(R.id.eExpenseList);
+            loadGroupData();
+/*
             ArrayList<String> listOfMembers = new ArrayList<>();
             for(Person p : activeExpenseGroup.getMembers()){
                 listOfMembers.add(p.getName());
@@ -273,16 +282,6 @@ public class MainActivity extends ActionBarActivity
             MembersAdapter membersAdapter = new MembersAdapter(getActivity().getBaseContext(),
                     activeExpenseGroup.getMembers(),
                     activeExpenseGroup.getExpenses());
-            membersList.setOnItemClickListener(new ListView.OnItemClickListener(){
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent expenseActivityIntent = new Intent(getActivity().getBaseContext().getString(R.string.new_expense_intent));
-                    expenseActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    expenseActivityIntent.putExtra(getString(R.string.group_number), activeGroupId);
-                    expenseActivityIntent.putExtra(getString(R.string.member_db_id), id);
-                    startActivity(expenseActivityIntent);
-                }
-            });
             membersList.setAdapter(membersAdapter);
 
             ExpandableListView eExpenseList = (ExpandableListView) rootView.findViewById(R.id.eExpenseList);
@@ -308,32 +307,69 @@ public class MainActivity extends ActionBarActivity
                     );
 
             eExpenseList.setAdapter(expenseAdapter);
-
-            Button addExpenseButton = (Button) rootView.findViewById(R.id.addExpenseButton);
-/*         addExpenseButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent expenseActivityIntent = new Intent(getActivity().getBaseContext().getString(R.string.new_expense_intent));
-                    expenseActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    expenseActivityIntent.putExtra(getString(R.string.group_number), activeGroupId);
-                    startActivity(expenseActivityIntent);
-                }
-            });
 */
-            addExpenseButton.setText("Payments");
-            addExpenseButton.setOnClickListener(new View.OnClickListener() {
+            Button suggestPaymentButton = (Button) rootView.findViewById(R.id.addExpenseButton);
+
+            suggestPaymentButton.setText("Payments");
+            suggestPaymentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CalculateExpenses.getInstance().calculateSplitPayment(activeExpenseGroup);
-                    Intent expenseActivityIntent = new Intent(getActivity().getBaseContext().getString(R.string.new_payment_intent));
-                    expenseActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(expenseActivityIntent);
+                    Intent paymentActivityIntent = new Intent(getActivity().getBaseContext().getString(R.string.new_payment_intent));
+                    paymentActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    paymentActivityIntent.putExtra(getString(R.string.group_number), activeGroupId);
+                    startActivityForResult(paymentActivityIntent, expenseResultCode);
+
                 }
             });
             TextView totalGroupExpenses = (TextView) rootView.findViewById(R.id.totalExpenseTextView);
-            totalGroupExpenses.setText("Groups Total: " + expenseAdapter.getTotalExpenses() + "kr");
+            //totalGroupExpenses.setText("Groups Total: " + expenseAdapter.getTotalExpenses() + "kr");
 
             return rootView;
+        }
+
+        public void loadGroupData(){
+            ArrayList<String> listOfMembers = new ArrayList<>();
+            for(Person p : activeExpenseGroup.getMembers()){
+                listOfMembers.add(p.getName());
+            }
+
+
+            MembersAdapter membersAdapter = new MembersAdapter(getActivity().getBaseContext(),
+                    activeExpenseGroup.getMembers(),
+                    activeExpenseGroup.getExpenses());
+            membersList.setAdapter(membersAdapter);
+
+
+
+            LinkedHashMap<Long, List<String>> mappedDetails = new LinkedHashMap<>();
+
+            ArrayList<String> affectedNames;
+            ArrayList<Expense> expenses = activeExpenseGroup.getExpenses();
+            for(Expense e : expenses){
+                affectedNames = new ArrayList<>();
+                for(long aId : e.getAffectedMembersIds()){
+                    Person member = activeExpenseGroup.getMemberById(aId);
+                    if(member != null) {
+                        affectedNames.add(member.getName());
+                    }
+                }
+                mappedDetails.put(e.getDbId(), affectedNames);
+            }
+
+            ExpenseExpandAdapter expenseAdapter = new ExpenseExpandAdapter(getActivity(),
+                    expenses,
+                    mappedDetails
+            );
+
+            eExpenseList.setAdapter(expenseAdapter);
+        }
+
+        @Override   //TODO: Remove if no use for this code is found
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if(requestCode == expenseResultCode){
+                loadGroupData();
+            }
         }
 
         @Override

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.tobbe.uoweme.Activities.MainActivity;
 import com.example.tobbe.uoweme.ExpenseGroup;
@@ -53,8 +54,10 @@ public class GroupListener implements View.OnClickListener {
                 activeGroup.setDescription(editDescription.getText().toString());
                 if (createButton.getText().toString().equals(context.getString(R.string.save_group_changes))) {//MainActivity.mDbHelper.updateDbRow(MainActivity.GroupSettingsFragment.getActiveGroup());
                     MainActivity.db.updateGroup(MainActivity.GroupSettingsFragment.getActiveGroup());
+                    Toast.makeText(context, "Group data has been saved.", Toast.LENGTH_SHORT).show();
                 } else {
                     NavigationDrawerFragment.mGroupAdapter.addGroup(activeGroup);
+                    Toast.makeText(context, "New group has been created.", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
