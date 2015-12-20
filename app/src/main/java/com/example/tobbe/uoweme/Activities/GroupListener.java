@@ -52,7 +52,7 @@ public class GroupListener implements View.OnClickListener {
                 ExpenseGroup activeGroup = MainActivity.GroupSettingsFragment.getActiveGroup();
                 activeGroup.setTitle(editTitle.getText().toString());
                 activeGroup.setDescription(editDescription.getText().toString());
-                if (createButton.getText().toString().equals(context.getString(R.string.save_group_changes))) {//MainActivity.mDbHelper.updateDbRow(MainActivity.GroupSettingsFragment.getActiveGroup());
+                if (createButton.getText().toString().equals(context.getString(R.string.save_group_changes))) {
                     MainActivity.db.updateGroup(MainActivity.GroupSettingsFragment.getActiveGroup());
                     Toast.makeText(context, "Group data has been saved.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -90,7 +90,7 @@ public class GroupListener implements View.OnClickListener {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             //Ask the user if they want to quit
-            Log.d("GroupLongListner", "Trying to delete members");
+            Log.d("GroupLongListener", "Trying to delete member with id: " + id + " and position: " + position);
             final ExpenseGroup activeGroup = GroupAdapter.getExpenseGroup(MainActivity.activeGroupId);
             new AlertDialog.Builder(this.context)
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -100,7 +100,7 @@ public class GroupListener implements View.OnClickListener {
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // Delete group
+                            // Delete member
 
                             activeGroup.deleteAllMembers();
                             activeGroup.deleteAllExpenses();
@@ -109,9 +109,6 @@ public class GroupListener implements View.OnClickListener {
                     })
                     .setNegativeButton("No", null)
                     .show();
-
-
-
             return true;
         }
 

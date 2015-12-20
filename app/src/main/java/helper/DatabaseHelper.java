@@ -295,7 +295,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long person_id = db.insert(TABLE_MEMBER, null, values);
         savePerson.setDbId(person_id);
-        Log.d(LOG, "Save Person with id: " +person_id + " & " +values.toString());
+        Log.d(LOG, "Save Person with id: " + person_id + " & " + values.toString());
+        Communicator.addPersonToServerDb(savePerson);
         return person_id;
     }
 

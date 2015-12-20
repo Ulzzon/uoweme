@@ -23,6 +23,8 @@ import com.example.tobbe.uoweme.ExpenseGroup;
 import com.example.tobbe.uoweme.Person;
 import com.example.tobbe.uoweme.R;
 
+import helper.Communicator;
+
 /**
  * Created by Tobbe on 2015-03-14.
  */
@@ -35,7 +37,6 @@ public class NewMemberActivity extends Activity implements View.OnClickListener{
     Button cancelButton;
     ImageButton contactButton;
     private final int PICK_CONTACT = 70;
-    private static final String[] phoneProjection = new String[] {ContactsContract.CommonDataKinds.Phone.DATA};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,21 +59,6 @@ public class NewMemberActivity extends Activity implements View.OnClickListener{
 
     }
 
- /*   @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Only show items in the action bar relevant to this screen
-        // if the drawer is not showing. Otherwise, let the drawer
-        // decide what to show in the action bar.
-        getMenuInflater().inflate(R.menu.new_member, menu);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("New member");
-        //return true;
-
-        return super.onCreateOptionsMenu(menu);
-    }
-*/
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -126,20 +112,6 @@ public class NewMemberActivity extends Activity implements View.OnClickListener{
                         c.close();
 
                     }
-                    /*
-                    if(cursor == null) return;
-                    try {
-                        cursor.moveToFirst();
-                        int numberColumn = cursor.getColumnIndex(Phone.NUMBER);
-                        int nameColumn = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-                        String phoneNumber = cursor.getString(numberColumn);
-                        String name = cursor.getString(nameColumn);
-                        phoneText.setText(phoneNumber);
-                        nameText.setText(name);
-                    }finally {
-                        cursor.close();
-                    }
-                    */
                     Log.d("NewMemberActivity", "Got a good result from caontacts");
                 }
                 break;

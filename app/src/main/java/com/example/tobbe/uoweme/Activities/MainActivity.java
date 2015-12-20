@@ -3,6 +3,7 @@ package com.example.tobbe.uoweme.Activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +26,6 @@ import android.widget.TextView;
 import com.example.tobbe.uoweme.Expense;
 import com.example.tobbe.uoweme.ExpenseGroup;
 import com.example.tobbe.uoweme.NavigationDrawerFragment;
-import com.example.tobbe.uoweme.PaymentClass;
 import com.example.tobbe.uoweme.Person;
 import com.example.tobbe.uoweme.R;
 import com.example.tobbe.uoweme.adapters.ExpenseExpandAdapter;
@@ -42,9 +41,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import helper.CalculateExpenses;
+import helper.Communicator;
 import helper.DatabaseHelper;
-
+import android.provider.Settings.Secure;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -63,15 +62,19 @@ public class MainActivity extends ActionBarActivity
 
     public static android.support.v4.app.FragmentManager fragmentManager;
 
-    private Socket mSocket;
+
+
+    public static String android_id;
+
+/*    public static Socket connectionSocket;
     {
         try{
-            mSocket = IO.socket("http://192.168.1.246:8888");
+            connectionSocket = IO.socket("http://192.168.1.246:8888");
             Log.d("Communicator","Setting up socket");
         }catch (Exception e){
             Log.d("Socket", "ERROR: " +e.toString());
         }
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +89,14 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         fragmentManager = getSupportFragmentManager();
+        android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
 
-
-        mSocket.on("hand_shake", handShakeListener);
-        if(mSocket != null){
-            mSocket.connect();
-        }
+        Communicator.startCommunication();
+ /*       connectionSocket.on("hand_shake", handShakeListener);
+        if(connectionSocket != null){
+            connectionSocket.connect();
+        }*/
 
     }
 
@@ -105,7 +110,7 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
-    private Emitter.Listener handShakeListener = new Emitter.Listener() {
+/*    private Emitter.Listener handShakeListener = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
             runOnUiThread(new Runnable() {
@@ -113,7 +118,7 @@ public class MainActivity extends ActionBarActivity
                 public void run() {
                     JSONObject data = (JSONObject) args[0];
                     try{
-                        mSocket.emit("hand_shake_ok", "hello");
+                        connectionSocket.emit("hand_shake_ok", "hello");
                     }catch (Exception e){
                         Log.d("emit", "Handshake failed");
                         return;
@@ -137,14 +142,14 @@ public class MainActivity extends ActionBarActivity
             //setResult(RESULT_OK, intent);
             //finish();
         }
-    };
+    };*/
 
     @Override
     public void onDestroy(){
         db.updateGroup(GroupAdapter.getExpenseGroup(activeGroupId));
         super.onDestroy();
-        mSocket.disconnect();
-        mSocket.off("hand_shake", handShakeListener);
+        Communicator.killConnection();
+
     }
 
     public void onSectionAttached(String title) {

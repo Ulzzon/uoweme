@@ -3,6 +3,7 @@ package com.example.tobbe.uoweme;
 import android.util.Log;
 
 import com.example.tobbe.uoweme.Activities.MainActivity;
+import com.example.tobbe.uoweme.adapters.ExpenseList;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class ExpenseGroup {
     private ArrayList<Person> members = new ArrayList<>();
     private long[] membersId = {0};
     private long[] expenseId = {0};
-    private ArrayList<Expense> expenses = new ArrayList<>();
+    private ExpenseList expenses = new ExpenseList();
 
     private String LOG = "ExpenseGroup: ";
 
@@ -121,6 +122,14 @@ public class ExpenseGroup {
         }
     }
 
+    public void deleteMember(Person personTodDeletFromGroup){
+        if(!members.isEmpty()) {
+            MainActivity.db.deletePerson(personTodDeletFromGroup.getDbId());
+
+            MainActivity.db.updateGroup(this);
+        }
+    }
+
 
     /* ##### Expenses ##### */
     public void addExpense(Expense expense){
@@ -131,12 +140,21 @@ public class ExpenseGroup {
 
     public void deleteAllExpenses(){
         if(!expenses.isEmpty()){
-            for(Expense e : expenses){
+            for(int i = 0; i<expenses.size(); i++){
+                Expense e = expenses.get(i);
                 MainActivity.db.deleteExpense(e.getDbId());
             }
-            expenses.clear();
+ /*           for(Expense e : expenses){
+                MainActivity.db.deleteExpense(e.getDbId());
+            }
+ */           expenses.clear();
         }
     }
+
+    public void deleteExpense(Expense expense){
+        expenses.remove(expense.getDbId());
+    }
+
 
     public void setExpenseId(long[] expensesId){
         expenseId = expensesId;
@@ -167,11 +185,20 @@ public class ExpenseGroup {
 
 
     private boolean expenseExistInArray(Expense expenseToLookFor){
+        for(int i = 0; i < expenses.size(); i++){
+            Expense e = expenses.get(i);
+            if(e.getDbId() == expenseToLookFor.getDbId()){
+                return true;
+            }
+
+
+        }
+/*
         for(Expense e : expenses){
             if(e.getDbId() == expenseToLookFor.getDbId()){
                 return true;
             }
-        }
+       }  */
         return false;
     }
 

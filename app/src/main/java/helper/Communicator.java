@@ -2,8 +2,11 @@ package helper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.provider.Settings;
 import android.util.Log;
 
+import com.example.tobbe.uoweme.Activities.MainActivity;
+import com.example.tobbe.uoweme.Person;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -14,40 +17,45 @@ import org.json.JSONObject;
 /**
  * Created by TobiasOlsson on 15-07-01.
  */
-public class Communicator extends Activity {
+public class Communicator{// extends Activity {
 
-    public static Socket mSocket;
-    {
+    private static final String userName = "user";
+    private static final String phoneNumber = "phoneNr";
+
+    private static final String logHead = "Communicator";
+    private static final String connectionUrl = "http://192.168.1.246:8888";
+    private static Socket connectionSocket;
+
+
+    public static void startCommunication(){
         try{
-            mSocket = IO.socket("http://192.168.1.246:8888");
-            Log.d("Communicator","Setting up socket");
-        }catch (Exception e){
-            Log.d("Socket", "ERROR: " +e.toString());
+            connectionSocket = IO.socket(connectionUrl);
+            connectionSocket.on("hand_shake", handShakeListener);
+            connectionSocket.connect();
+        }
+        catch (Exception e)
+        {
+            Log.d(logHead, "Faild to connect to socket, error: " + e.getMessage());
         }
     }
 
-    public void sendHandShake(){
-        String deviceId = "1234";
-        JSONObject json = new JSONObject();
-        try {
-            json.putOpt("deviceId", deviceId);
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-        mSocket.emit("hand_shake", "hello");
+    public static void killConnection(){
+        connectionSocket.disconnect();
+        connectionSocket.off("hand_shake", handShakeListener);
     }
+
 
     public static Emitter.Listener handShakeListener = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             JSONObject data = (JSONObject) args[0];
-            mSocket.emit("hand_shake", "hello");
-            int numUsers;
-            try {
-                numUsers = data.getInt("numUsers");
-            } catch (JSONException e) {
-                return;
-            }
+            connectionSocket.emit("hand_shake_ok", MainActivity.android_id);
+//            int numUsers;
+//            try {
+//                numUsers = data.getInt("numUsers");
+//            } catch (JSONException e) {
+//                return;
+//            }
 
             //Intent intent = new Intent();
             //intent.putExtra("username", mUsername);
@@ -58,15 +66,38 @@ public class Communicator extends Activity {
     };
 
 
-
-
-    public void sendMessage(String message) {
+    public static void sendMessage(String message) {
         try {
             JSONObject json = new JSONObject();
             json.putOpt("message", message);
-            mSocket.emit("user message", json);
+            connectionSocket.emit("message", json);
         } catch (JSONException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public static void addPersonToServerDb(Person person){
+        try{
+            JSONObject json = new JSONObject();
+            json.putOpt(userName, person.getName());
+            json.putOpt(phoneNumber, person.getNumber());
+            connectionSocket.emit("addUser", json);
+        }
+        catch(Exception e)
+        {
+            Log.d(logHead, "Faild to create and send personal information");
+        }
+    }
+
+    public static void updatePersonOnServerDb(Person person){
+        try{
+            JSONObject json = new JSONObject();
+            json.put(userName, person.getName());
+            json.put("newPhoneNr", person.getNumber());
+            connectionSocket.emit("updateUser", json);
+        }
+        catch (Exception e){
+            Log.d(logHead, "Faild to create json and update person");
         }
     }
 }

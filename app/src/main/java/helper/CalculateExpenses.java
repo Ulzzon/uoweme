@@ -81,10 +81,8 @@ public class CalculateExpenses {
             int pExpense = calculateIndividualTotal(p, expenses);
             if (pExpense > 0) {
                 personalExpenses.add(new SortExpenses(p, pExpense));
-                //personalPositiveExpenseMap.put(p, pExpense);
             } else if (pExpense < 0) {  // Use absolute value even if list contains debts
                 personalDebts.add(new SortExpenses(p, Math.abs(pExpense)));
-                //personalNegativeExpenseMap.put(p, Math.abs(pExpense));
             }   // else person has no expenses or debts
         }
 
@@ -109,13 +107,9 @@ public class CalculateExpenses {
                 // The perfect match exist?
                 if (debt.getExpenseAmount() == expense.getExpenseAmount()) {
                     solvedPayments.add(new PaymentClass(debt.getPerson(), expense.getPerson(), debt.getExpenseAmount()));
-                    //debt.setExpenseAmount(0);
-                    //personalDebts.set(i, debt);
-                    //personalDebts.remove(debt);
                     debtIterator.remove();
                     expensesIterator.remove();
-                    //personalExpenses.remove(expense);
-                    Log.d("CalculteExp", "Found a perfect match");
+                    Log.d(logTitle, "Found a perfect match");
                     break;
                 } else if (expense.getExpenseAmount() < debt.getExpenseAmount()) {
                     break;
@@ -124,33 +118,46 @@ public class CalculateExpenses {
         }
 
         Collections.sort(personalDebts);
+        Collections.sort(personalExpenses);
+        debtIterator = personalDebts.iterator();
+        expensesIterator = personalExpenses.iterator();
 
+
+        debtLoop:
         while (debtIterator.hasNext()) {
             SortExpenses debt = debtIterator.next();
-            Log.d("CalculateExp/findPay", "Searching for a good match for: " + debt.getExpenseAmount());
+            Log.d(logTitle, "Searching for a good match for: " + debt.getExpenseAmount());
             PaymentClass tmpSuggestion = new PaymentClass();
             SortExpenses tmpExpense = new SortExpenses();
             Collections.sort(personalExpenses);
+
+            expenseLoop:
             while (expensesIterator.hasNext()) {
                 SortExpenses expense = expensesIterator.next();
                 // Is single payments possible?
                 if (debt.getExpenseAmount() < expense.getExpenseAmount()) {
                     tmpSuggestion = new PaymentClass(debt.getPerson(), expense.getPerson(), debt.getExpenseAmount());
                     tmpExpense = expense;
-                    break;
+                    Log.d(logTitle, "Found one tmp match");
                 } // Will not find anny better match
                 else if (debt.getExpenseAmount() > expense.getExpenseAmount()) {
 
                     // Is there any expense that is bigger then the debt?
                     if (tmpSuggestion.getAmount() != 0) {
                         solvedPayments.add(tmpSuggestion);
-                        //personalDebts.remove(debt);
                         debtIterator.remove();
                         int location = personalExpenses.indexOf(tmpExpense);
                         tmpExpense.setExpenseAmount(tmpExpense.getExpenseAmount() - debt.getExpenseAmount());
                         personalExpenses.set(location, tmpExpense);
                     }
-                    break;
+                    else {
+                        solvedPayments.add(new PaymentClass(debt.getPerson(), expense.getPerson(), expense.getExpenseAmount()));
+                        expensesIterator.remove();
+                        int location = personalDebts.indexOf(debt);
+                        debt.setExpenseAmount(debt.getExpenseAmount() - tmpExpense.getExpenseAmount());
+                        personalDebts.set(location, debt);
+                    }
+
                 }
             }
         }
