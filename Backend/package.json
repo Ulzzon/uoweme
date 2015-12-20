@@ -1,0 +1,14 @@
+{
+  "name": "UOweMeServerSide",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^3.5.3",
+    "mongoose": "^4.3.3",
+    "socket.io": "~1.0"
+  }
+}
