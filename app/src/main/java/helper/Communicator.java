@@ -50,18 +50,6 @@ public class Communicator{// extends Activity {
         public void call(Object... args) {
             JSONObject data = (JSONObject) args[0];
             connectionSocket.emit("hand_shake_ok", MainActivity.android_id);
-//            int numUsers;
-//            try {
-//                numUsers = data.getInt("numUsers");
-//            } catch (JSONException e) {
-//                return;
-//            }
-
-            //Intent intent = new Intent();
-            //intent.putExtra("username", mUsername);
-            //intent.putExtra("numUsers", numUsers);
-            //setResult(RESULT_OK, intent);
-            //finish();
         }
     };
 
