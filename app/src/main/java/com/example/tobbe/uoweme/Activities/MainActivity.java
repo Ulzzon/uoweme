@@ -61,20 +61,8 @@ public class MainActivity extends ActionBarActivity
     public static DatabaseHelper db;
 
     public static android.support.v4.app.FragmentManager fragmentManager;
-
-
-
     public static String android_id;
 
-/*    public static Socket connectionSocket;
-    {
-        try{
-            connectionSocket = IO.socket("http://192.168.1.246:8888");
-            Log.d("Communicator","Setting up socket");
-        }catch (Exception e){
-            Log.d("Socket", "ERROR: " +e.toString());
-        }
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +79,9 @@ public class MainActivity extends ActionBarActivity
         fragmentManager = getSupportFragmentManager();
         android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-
         Communicator.startCommunication();
- /*       connectionSocket.on("hand_shake", handShakeListener);
-        if(connectionSocket != null){
-            connectionSocket.connect();
-        }*/
+        Intent loginIntent = new Intent(this,LoginActivity.class);
+        startActivity(loginIntent);
 
     }
 
@@ -110,39 +95,6 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
-/*    private Emitter.Listener handShakeListener = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    try{
-                        connectionSocket.emit("hand_shake_ok", "hello");
-                    }catch (Exception e){
-                        Log.d("emit", "Handshake failed");
-                        return;
-                    }
-
-                }
-            });
-//            J
-
-            //int numUsers;
-            //try {
-                //numUsers = data.getInt("numUsers");
-            //} catch (JSONException e) {
-            //    return;
-            //}
-
-            //Intent intent = new Intent();
-            //intent.putExtra("handshake", "ok");
-            //intent.putExtra("username", mUsername);
-            //intent.putExtra("numUsers", numUsers);
-            //setResult(RESULT_OK, intent);
-            //finish();
-        }
-    };*/
 
     @Override
     public void onDestroy(){
@@ -214,6 +166,12 @@ public class MainActivity extends ActionBarActivity
 
             return true;
         }
+        else if(id == R.id.logout){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            // TODO: add removal of Cookie
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -277,42 +235,6 @@ public class MainActivity extends ActionBarActivity
             membersList = (ListView) rootView.findViewById(R.id.memberList);
             eExpenseList = (ExpandableListView) rootView.findViewById(R.id.eExpenseList);
             loadGroupData();
-/*
-            ArrayList<String> listOfMembers = new ArrayList<>();
-            for(Person p : activeExpenseGroup.getMembers()){
-                listOfMembers.add(p.getName());
-            }
-            ListView membersList = (ListView) rootView.findViewById(R.id.memberList);
-
-            MembersAdapter membersAdapter = new MembersAdapter(getActivity().getBaseContext(),
-                    activeExpenseGroup.getMembers(),
-                    activeExpenseGroup.getExpenses());
-            membersList.setAdapter(membersAdapter);
-
-            ExpandableListView eExpenseList = (ExpandableListView) rootView.findViewById(R.id.eExpenseList);
-
-            LinkedHashMap<Long, List<String>> mappedDetails = new LinkedHashMap<>();
-
-            ArrayList<String> affectedNames;
-            ArrayList<Expense> expenses = activeExpenseGroup.getExpenses();
-            for(Expense e : expenses){
-                affectedNames = new ArrayList<>();
-                for(long aId : e.getAffectedMembersIds()){
-                    Person member = activeExpenseGroup.getMemberById(aId);
-                    if(member != null) {
-                        affectedNames.add(member.getName());
-                    }
-                }
-                mappedDetails.put(e.getDbId(), affectedNames);
-            }
-
-            ExpenseExpandAdapter expenseAdapter = new ExpenseExpandAdapter(getActivity(),
-                    expenses,
-                    mappedDetails
-                    );
-
-            eExpenseList.setAdapter(expenseAdapter);
-*/
             Button suggestPaymentButton = (Button) rootView.findViewById(R.id.addExpenseButton);
 
             suggestPaymentButton.setText("Payments");

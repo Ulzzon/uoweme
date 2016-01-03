@@ -13,4 +13,9 @@
         android:title="@string/action_settings"
         android:orderInCategory="150"
         app:showAsAction="never" />
+    />
+    <item android:id="@+id/logout"
+        android:title="@string/log_out"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
 </menu>

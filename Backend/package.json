@@ -7,8 +7,13 @@
   },
   "dependencies": {
     "body-parser": "^1.14.2",
+    "connect": "~2.14.4",
+    "crypto": "0.0.3",
+    "csprng": "^0.1.1",
     "express": "^3.5.3",
+    "gravatar": "^1.4.0",
     "mongoose": "^4.3.3",
+    "nodemailer": "~0.7.1",
     "socket.io": "~1.0"
   }
 }

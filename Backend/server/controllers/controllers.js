@@ -1,7 +1,7 @@
 var Users = require('../models/users');
 
 module.exports.create = function (req, res) {
-  var user = new Users(req.body);
+  var user = new Users_old(req.body);
   user.save(function (err, result) {
     res.json(result);
   });
@@ -13,8 +13,8 @@ module.exports.list = function (req, res) {
   });
 }
 
-module.exports.add = function (req,res){
-	var user = new Users();
+module.exports.add = function (req, res){
+	var user = new Users_old();
 	user.name = req.user;
 	user.phone = req.phoneNr;
 	user.save(function (err, result){
@@ -24,7 +24,7 @@ module.exports.add = function (req,res){
 
 module.exports.update = function (req, res){
 	Users.find({}, function (err, findResult){
-		var user = User(findResult);
+		var user = User_old(findResult);
 		user.phone = req.newPhoneNr;
 		user.save(function (err, result){
 			res(result);

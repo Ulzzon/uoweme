@@ -17,7 +17,7 @@ import org.json.JSONObject;
 /**
  * Created by TobiasOlsson on 15-07-01.
  */
-public class Communicator{// extends Activity {
+public class Communicator{
 
     private static final String userName = "user";
     private static final String phoneNumber = "phoneNr";

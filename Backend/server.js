@@ -3,21 +3,31 @@ var fs = require('fs'),
 	socketio = require('socket.io'),
 	express = require('express'),
 	app = express(),
-	bodyParser = require('body-parser'),
+	connect = require('connect'),
+//	bodyParser = require('body-parser'),
 	mongoose = require('mongoose'),
 	controller = require('./server/controllers/controllers'),
 	Users = require('./server/models/users');
+	var port     = process.env.PORT || 8080;
 
-mongoose.connect('mongodb://localhost:27017/uomdb');
+//mongoose.connect('mongodb://localhost:27017/uomdb');
 
-app.use(bodyParser());
+// Configuration 
+//app.use(bodyParser());
+app.use(express.static(__dirname + '/public')); 
+app.use(connect.logger('dev')); 
+app.use(connect.json()); 
+app.use(connect.urlencoded());
+// Routes  
+require('./Routes/routes.js')(app);    
 
-var server = http.createServer(function(req, resp){
+/* var server = http.createServer(function(req, resp){
 	resp.writeHead(200, { 'Content-type': 'text/html'});
 	resp.end(fs.readFileSync(__dirname + '/index.html'));
 }).listen(8888);
-
-
+*/
+app.listen(port);
+/*
 socketio.listen(server).on('connection', function(socket){
 	socket.emit('hand_shake', { 'shaker' : 'server'});
 		console.log('Connected');
@@ -58,3 +68,4 @@ socketio.listen(server).on('connection', function(socket){
 		console.log('Device disconnected');
 	});
 });
+*/
