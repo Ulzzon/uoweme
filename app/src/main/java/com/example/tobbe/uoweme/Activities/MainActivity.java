@@ -3,6 +3,7 @@ package com.example.tobbe.uoweme.Activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -25,17 +26,13 @@ import android.widget.TextView;
 
 import com.example.tobbe.uoweme.Expense;
 import com.example.tobbe.uoweme.ExpenseGroup;
+import com.example.tobbe.uoweme.Fragments.ProfileFragment;
 import com.example.tobbe.uoweme.NavigationDrawerFragment;
 import com.example.tobbe.uoweme.Person;
 import com.example.tobbe.uoweme.R;
 import com.example.tobbe.uoweme.adapters.ExpenseExpandAdapter;
 import com.example.tobbe.uoweme.adapters.GroupAdapter;
 import com.example.tobbe.uoweme.adapters.MembersAdapter;
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -80,7 +77,7 @@ public class MainActivity extends ActionBarActivity
         android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         Communicator.startCommunication();
-        Intent loginIntent = new Intent(this,LoginActivity.class);
+        Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
 
     }
@@ -97,7 +94,7 @@ public class MainActivity extends ActionBarActivity
 
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         db.updateGroup(GroupAdapter.getExpenseGroup(activeGroupId));
         super.onDestroy();
         Communicator.killConnection();
@@ -159,14 +156,14 @@ public class MainActivity extends ActionBarActivity
                     .commit();
 
             return true;
-        }else if(id == R.id.menu_profile){
+        } else if (id == R.id.menu_profile) {
             fragmentManager.beginTransaction()
                     .replace(R.id.container, ProfileFragment.newInstance())
                     .commit();
 
             return true;
-        }
-        else if(id == R.id.logout){
+        } else if (id == R.id.logout) {
+            clearPreferences();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             // TODO: add removal of Cookie
@@ -174,6 +171,13 @@ public class MainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void clearPreferences(){
+        SharedPreferences.Editor preferences = getSharedPreferences("AppPref", MODE_PRIVATE).edit();
+        preferences.putString("token", "");
+        preferences.putString("name", "");
+        preferences.putString("email", "");
     }
 
     public static void showNewGroupFragment() {
@@ -228,8 +232,8 @@ public class MainActivity extends ActionBarActivity
             try {
                 activeExpenseGroup = GroupAdapter.getExpenseGroup(position);
                 description.setText(activeExpenseGroup.getDescription());
-            }catch(Exception e){
-                Log.d(LOG,"Not able to grab group"  );
+            } catch (Exception e) {
+                Log.d(LOG, "Not able to grab group");
             }
 
             membersList = (ListView) rootView.findViewById(R.id.memberList);
@@ -254,9 +258,9 @@ public class MainActivity extends ActionBarActivity
             return rootView;
         }
 
-        public void loadGroupData(){
+        public void loadGroupData() {
             ArrayList<String> listOfMembers = new ArrayList<>();
-            for(Person p : activeExpenseGroup.getMembers()){
+            for (Person p : activeExpenseGroup.getMembers()) {
                 listOfMembers.add(p.getName());
             }
 
@@ -267,16 +271,15 @@ public class MainActivity extends ActionBarActivity
             membersList.setAdapter(membersAdapter);
 
 
-
             LinkedHashMap<Long, List<String>> mappedDetails = new LinkedHashMap<>();
 
             ArrayList<String> affectedNames;
             ArrayList<Expense> expenses = activeExpenseGroup.getExpenses();
-            for(Expense e : expenses){
+            for (Expense e : expenses) {
                 affectedNames = new ArrayList<>();
-                for(long aId : e.getAffectedMembersIds()){
+                for (long aId : e.getAffectedMembersIds()) {
                     Person member = activeExpenseGroup.getMemberById(aId);
-                    if(member != null) {
+                    if (member != null) {
                         affectedNames.add(member.getName());
                     }
                 }
@@ -294,7 +297,7 @@ public class MainActivity extends ActionBarActivity
         @Override   //TODO: Remove if no use for this code is found
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
-            if(requestCode == expenseResultCode){
+            if (requestCode == expenseResultCode) {
                 loadGroupData();
             }
         }
@@ -326,10 +329,10 @@ public class MainActivity extends ActionBarActivity
         public static GroupSettingsFragment newInstance(int sectionNumber) {
             GroupSettingsFragment fragment = new GroupSettingsFragment();
             Bundle args = new Bundle();
-            if(sectionNumber <= GroupAdapter.getNumberOfGroups()){
+            if (sectionNumber <= GroupAdapter.getNumberOfGroups()) {
                 args.putInt(ARG_SECTION_NUMBER, sectionNumber);
                 args.putString(ARG_SECTION_TITLE, GroupAdapter.getExpenseGroup(sectionNumber).getTitle());
-            }else{
+            } else {
                 args.putInt(ARG_SECTION_NUMBER, sectionNumber);
                 args.putString(ARG_SECTION_TITLE, "New Group");
             }
@@ -348,13 +351,13 @@ public class MainActivity extends ActionBarActivity
             Context mContext = getActivity().getBaseContext();
             ArrayList<String> allNames = new ArrayList<>();
             groupNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-            if(getArguments().getString(ARG_SECTION_TITLE).equals("New Group")){
+            if (getArguments().getString(ARG_SECTION_TITLE).equals("New Group")) {
                 activeGroup = new ExpenseGroup("New Group");
-            }else{
+            } else {
 
                 activeGroup = GroupAdapter.getExpenseGroup(groupNumber);
                 ArrayList<Person> activeGroupMembers = activeGroup.getMembers();
-                for(Person p : activeGroupMembers){
+                for (Person p : activeGroupMembers) {
                     allNames.add(p.getName());
                 }
                 loadFragmentWithGroup(rootView, activeGroup);
@@ -404,71 +407,71 @@ public class MainActivity extends ActionBarActivity
             return activeGroup;
         }
     }
-
-
-    public static class ProfileFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-        private static final String ARG_SECTION_TITLE = "section_title";
-        private Person owner;
-        private EditText textName;
-        private EditText textPhoneNr;
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static ProfileFragment newInstance() {
-            ProfileFragment fragment = new ProfileFragment();
-            Bundle args = new Bundle();
-            //args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            args.putString(ARG_SECTION_TITLE, "Profile");
-            fragment.setArguments(args);
-
-            return fragment;
-        }
-
-        public ProfileFragment() {
-            owner = new Person();
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
-
-
-            textName = (EditText) rootView.findViewById(R.id.profileName);
-            textPhoneNr = (EditText) rootView.findViewById(R.id.phoneText);
-
-            if(db.getContactTableSize() == 0){
-                db.savePersonToDb(owner);
-            }else{
-                Person profileOwner = db.getPerson(1);
-                textName.setText(profileOwner.getName());
-                textPhoneNr.setText(profileOwner.getNumber());
-            }
-
-            return rootView;
-        }
-
-        @Override
-        public void onDetach() {
-            owner.setName(textName.getText().toString() + " (Me)");
-            owner.setNumber(textPhoneNr.getText().toString());
-            //owner.setDbId(1);
-            db.updatePerson(owner);
-            super.onDetach();
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getString(ARG_SECTION_TITLE));
-        }
-    }
 }
+
+//    public static class ProfileFragment extends Fragment {
+//        /**
+//         * The fragment argument representing the section number for this
+//         * fragment.
+//         */
+//        private static final String ARG_SECTION_NUMBER = "section_number";
+//        private static final String ARG_SECTION_TITLE = "section_title";
+//        private Person owner;
+//        private EditText textName;
+//        private EditText textPhoneNr;
+//
+//        /**
+//         * Returns a new instance of this fragment for the given section
+//         * number.
+//         */
+//        public static ProfileFragment newInstance() {
+//            ProfileFragment fragment = new ProfileFragment();
+//            Bundle args = new Bundle();
+//            //args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+//            args.putString(ARG_SECTION_TITLE, "Profile");
+//            fragment.setArguments(args);
+//
+//            return fragment;
+//        }
+//
+//        public ProfileFragment() {
+//            owner = new Person();
+//        }
+//
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                                 Bundle savedInstanceState) {
+//            final View rootView = inflater.inflate(R.layout.fragment_profile_page, container, false);
+//
+//
+//            textName = (EditText) rootView.findViewById(R.id.profileName);
+//            textPhoneNr = (EditText) rootView.findViewById(R.id.phoneText);
+//
+//            if(db.getContactTableSize() == 0){
+//                db.savePersonToDb(owner);
+//            }else{
+//                Person profileOwner = db.getPerson(1);
+//                textName.setText(profileOwner.getName());
+//                textPhoneNr.setText(profileOwner.getNumber());
+//            }
+//
+//            return rootView;
+//        }
+//
+//        @Override
+//        public void onDetach() {
+//            owner.setName(textName.getText().toString() + " (Me)");
+//            owner.setNumber(textPhoneNr.getText().toString());
+//            //owner.setDbId(1);
+//            db.updatePerson(owner);
+//            super.onDetach();
+//        }
+//
+//        @Override
+//        public void onAttach(Activity activity) {
+//            super.onAttach(activity);
+//            ((MainActivity) activity).onSectionAttached(
+//                    getArguments().getString(ARG_SECTION_TITLE));
+//        }
+//    }
+//}

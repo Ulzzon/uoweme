@@ -1,4 +1,4 @@
-package com.example.tobbe.uoweme;
+package helper;
 
 import android.os.AsyncTask;
 import android.util.Log;

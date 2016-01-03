@@ -5,6 +5,9 @@ package helper;
  */
 public class Validation {
 
+    public static final int passwordMaxLength = 25;
+    public static final int passwordMinLength = 4;
+
     public static boolean validateEmail(String email){
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -15,7 +18,7 @@ public class Validation {
     }
 
     public static boolean validatePassword(String password){
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
+        if (password.isEmpty() || password.length() < passwordMinLength || password.length() > passwordMaxLength) {
             return false;
         } else {
             return true;

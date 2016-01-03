@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tobbe.uoweme.R;
-import com.example.tobbe.uoweme.ServerRequest;
+import helper.ServerRequest;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;

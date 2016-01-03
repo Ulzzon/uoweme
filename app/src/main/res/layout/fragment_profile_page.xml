@@ -1,65 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:fitsSystemWindows="true">
+
+<LinearLayout
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity$ProfileFragment">
+    android:paddingTop="56dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp">
 
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:id="@+id/profileImageView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="100dp"
-        android:src="@android:drawable/ic_menu_camera"/>
-
-    <EditText
+    <WebView android:src="@android:drawable/ic_menu_camera"
+        android:id="@+id/profile_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Name"
-        android:ems="10"
-        android:id="@+id/profileName"
-        android:layout_alignTop="@+id/profileImageView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginBottom="24dp"
+        android:layout_gravity="center_horizontal" />
 
-    <EditText
-        android:layout_width="wrap_content"
+    <!-- Name Label -->
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:hint="Phone"
-        android:ems="10"
-        android:id="@+id/phoneText"
-        android:layout_below="@+id/profileImageView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <RadioGroup
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/phoneText"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="60dp">
-        <RadioButton
-            android:id="@+id/exchange_sek"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+        <EditText android:id="@+id/input_name"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:text="@string/exchange_sek"/>
+            android:layout_height="wrap_content"
+            android:inputType="textCapWords"
+            android:hint="Name" />
+    </android.support.design.widget.TextInputLayout>
 
-        <RadioButton
-            android:id="@+id/exchange_eu"
+    <!--  Email Label -->
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+        <EditText android:id="@+id/input_email"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:text="@string/exchange_eu"/>
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="Email"
+            />
+    </android.support.design.widget.TextInputLayout>
 
-        <RadioButton
-            android:id="@+id/exchange_usd"
+    <!-- Phone Label -->
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+        <EditText android:id="@+id/input_phoneNr"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:text="@string/exchange_usd"/>
-        </RadioGroup>
-</RelativeLayout>
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:hint="Phone"/>
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>
+</ScrollView>
